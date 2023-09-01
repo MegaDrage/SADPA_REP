@@ -7,6 +7,8 @@ typedef struct list {
 } list;
 list* init(record data);
 void push(list*& head, record data);
+void queueInit(list*& head, list*& tail);
 void showList(list* head);
+void pushBack(list*& tail, record data);
 void destroyList(list*& head);
 #endif

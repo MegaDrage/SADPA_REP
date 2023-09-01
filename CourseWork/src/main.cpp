@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+
 #include <iostream>
-#include <cctype>
+
 #include "list.h"
 int main() {
     setlocale(LC_ALL, ".866");
@@ -15,8 +16,10 @@ int main() {
     }
     record Record;
     list* head = nullptr;
+    list* tail = nullptr;
+    queueInit(head, tail);
     while (fread(&Record, sizeof(record), 1, fp) == 1) {
-        push(head, Record);
+        pushBack(tail, Record);
     }
     showList(head);
     destroyList(head);

@@ -6,14 +6,22 @@ list* init(record data) {
     p->next = nullptr;
     return p;
 }
+
+void queueInit(list*& head, list*& tail) { tail = (list*)&head; }
 void push(list*& head, record data) {
     if (!head) {
         head = init(data);
         return;
     }
-    push(head->next, data);
+    head = head->next;
+    head = init(data);
 }
 
+void pushBack(list*& tail, record data) {
+    list* p = init(data);
+    tail->next = p;
+    tail = p;
+}
 void showList(list* head) {
     while (head) {
         showRecord(head->data);
