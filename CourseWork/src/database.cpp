@@ -1,9 +1,10 @@
 #include "database.h"
 
-void showRecord(record Record) {
-    printf("%s\n", Record.name);
-    printf("%s\n", Record.streetName);
-    printf("%d\n", Record.houseNumber);
-    printf("%d\n", Record.appNumber);
-    printf("%s\n", Record.settlementDate);
+#include "list.h"
+void showRecord(Record record) {
+    printf("%s\n", record.name);
+    printf("%s\n", record.streetName);
+    printf("%d\n", record.houseNumber);
+    printf("%d\n", record.appNumber);
+    printf("%s\n", record.settlementDate);
 }

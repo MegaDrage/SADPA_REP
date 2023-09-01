@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <windows.h>
 
 #include <iostream>
@@ -14,14 +13,13 @@ int main() {
         printf("Error opening file\n");
         return 1;
     }
-    record Record;
+    Record record;
     list* head = nullptr;
-    list* tail = nullptr;
-    queueInit(head, tail);
-    while (fread(&Record, sizeof(record), 1, fp) == 1) {
-        pushBack(tail, Record);
+    while (fread(&record, sizeof(Record), 1, fp) == 1) {
+        push(head, record);
     }
-    showList(head);
+    digitalSortStreetName(head);
+    showStack(head);
     destroyList(head);
     fclose(fp);
     return 0;

@@ -1,13 +1,22 @@
+#pragma once
 #ifndef DATABASE_H
 #define DATABASE_H
 #include <stdio.h>
 #include <string.h>
-typedef struct record {
+/*ФИО гражданина: текстовое поле 32 символа
+                    фоpмат <Фамилия>_<Имя>_<Отчество>
+    Название улицы: текстовое поле 18 символов
+    Номер дома:     целое число
+    Номер квартиры: целое число
+    Дата поселения: текстовое поле 10 символов
+                    фоpмат дд-мм-гг
+*/
+struct Record {
     char name[32];
     char streetName[18];
     short int houseNumber;
     short int appNumber;
     char settlementDate[10];
-} record;
-void showRecord(record Record);
+};
+void showRecord(Record record);
 #endif
