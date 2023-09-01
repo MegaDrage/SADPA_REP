@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <windows.h>
+#include <iostream>
+#include <cctype>
 #include "list.h"
 int main() {
+    setlocale(LC_ALL, ".866");
+    SetConsoleCP(866);
+    SetConsoleOutputCP(866);
     FILE* fp = fopen("testBase4.dat", "rb");
     if (!fp) {
         printf("Error opening file\n");
@@ -10,11 +15,9 @@ int main() {
     }
     record Record;
     list* head = nullptr;
-    // while (fread(&Record, sizeof(record), 1, fp) == 1) {
-    //     push(head, Record);
-    // }
-    fread(&Record, sizeof(record), 1, fp);
-    push(head, Record);
+    while (fread(&Record, sizeof(record), 1, fp) == 1) {
+        push(head, Record);
+    }
     showList(head);
     destroyList(head);
     fclose(fp);
