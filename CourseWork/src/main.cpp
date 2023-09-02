@@ -3,23 +3,17 @@
 
 #include <iostream>
 
+#include "database.h"
 #include "list.h"
+#include "record.h"
 int main() {
     setlocale(LC_ALL, ".866");
     SetConsoleCP(866);
     SetConsoleOutputCP(866);
-    FILE* fp = fopen("testBase4.dat", "rb");
-    if (!fp) {
-        printf("Error opening file\n");
-        return 1;
-    }
-    Record record;
+    int key = welcome();
+    FILE* fp;
     list* head = nullptr;
-    while (fread(&record, sizeof(Record), 1, fp) == 1) {
-        push(head, record);
-    }
-    digitalSortStreetName(head);
-    showStack(head);
+    menu(key, fp, head);
     destroyList(head);
     fclose(fp);
     return 0;

@@ -1,6 +1,6 @@
 #include "list.h"
 
-#include "database.h"
+#include "record.h"
 list* init(Record data) {
     list* p = new (list);
     p->data = data;
@@ -21,15 +21,15 @@ void pushBack(list*& tail, Record data) {
     tail->next = p;
     tail = p;
 }
-void showQueue(list* head) {
+void showList(list* head) {
     while (head) {
         showRecord(head->data);
         head = head->next;
     }
 }
-void showStack(list* head) {
+void showStackLikeQueue(list* head) {
     if (head) {
-        showStack(head->next);
+        showStackLikeQueue(head->next);
         showRecord(head->data);
     }
 }
@@ -40,19 +40,18 @@ void destroyList(list*& head) {
         delete p;
     }
 }
-
-void digitalSortStreetName(list*& S) {
+void digitalSortByStreetName(list*& S) {
     queue Q[256];
     list* p;
     int d;
-    int L = 3;
+    int L = 4;
     for (int j = L; j >= 0; j--) {
         for (int i = 0; i < 256; i++) {
             queueInit(Q[i].head, Q[i].tail);
         }
         p = S;
         while (p) {
-            d = p->data.streetName[j];
+            d = (p->data.streetName[j]) & 0xFF;
             Q[d].tail->next = p;
             Q[d].tail = p;
             p = p->next;
@@ -66,4 +65,34 @@ void digitalSortStreetName(list*& S) {
             p->next = nullptr;
         }
     }
+}
+void digitalSortByHouseNumber(list*& S) {
+    queue Q[256];
+    list* p;
+    int d;
+    int L = sizeof(short int);
+    for (int j = L; j >= 0; j--) {
+        for (int i = 0; i < 256; i++) {
+            queueInit(Q[i].head, Q[i].tail);
+        }
+        p = S;
+        while (p) {
+            d = (p->data.houseNumber >> (j * 8)) & 0xFF;
+            Q[d].tail->next = p;
+            Q[d].tail = p;
+            p = p->next;
+        }
+        p = (list*)&S;
+        for (int i = 0; i < 256; i++) {
+            if (Q[i].tail != (list*)&Q[i].head) {
+                p->next = Q[i].head;
+                p = Q[i].tail;
+            }
+            p->next = nullptr;
+        }
+    }
+}
+void digitalSortAll(list*& S) {
+    digitalSortByStreetName(S);
+    digitalSortByHouseNumber(S);
 }
