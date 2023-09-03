@@ -5,7 +5,6 @@
 
 #include "list.h"
 #include "record.h"
-#define MAX_DATA 4000
 /*ФИО гражданина: текстовое поле 32 символа
                     фоpмат <Фамилия>_<Имя>_<Отчество>
     Название улицы: текстовое поле 18 символов
@@ -16,7 +15,7 @@
 */
 FILE* openDB();
 void menu(int& key, FILE*& fp, list*& head);
-int welcome();
-int readData(FILE* fp, list*& head, int count);
+int readData(FILE* fp, list*& head);
 void menuShow();
+void showfullMenu(int& key);
 #endif

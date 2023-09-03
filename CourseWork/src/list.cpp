@@ -40,6 +40,70 @@ void destroyList(list*& head) {
         delete p;
     }
 }
+void indexArr(list* head, list** index) {
+    int i = 0;
+    list* p = head;
+    while (p) {
+        index[i++] = p;
+        p = p->next;
+    }
+}
+void showIndexArr(list** index, int count) {
+    for (int i = 0; i < count + 20; i++) {
+        showRecord(index[i]->data);
+    }
+}
+
+int binSearch(list** index, char x[KEY_SIZE + 1]) {
+    int L = 0;
+    int R = MAX_DATA - 1;
+    char data[KEY_SIZE + 1];
+    while (L < R) {
+        int mid = (L + R) / 2;
+        stringCopy(data, index[mid]->data.streetName, KEY_SIZE);
+        if (stringCompare(data, x) < 0) {
+            L = mid + 1;
+        } else {
+            R = mid;
+        }
+    }
+    stringCopy(data, index[R]->data.streetName, KEY_SIZE);
+    if (stringCompare(data, x) == 0) {
+        return R;
+    } else {
+        return -1;
+    }
+}
+
+queue* findAllKeys(list** index, int i, char x[4]) {
+    char data[KEY_SIZE + 1];
+    int keyMaxSize = findMaxKeySum(index);
+    queue* keys = new queue[keyMaxSize];
+    int keyIndex = asciiSum(data);
+    queueInit(keys[keyIndex].head, keys[keyIndex].tail);
+    while (1) {
+        stringCopy(data, index[i]->data.streetName, KEY_SIZE);
+        if (stringCompare(data, x) != 0) {
+            break;
+        }
+        pushBack(keys[keyIndex].tail, index[i]->data);
+        i++;
+    }
+    return keys;
+}
+int findMaxKeySum(list** index) {
+    char data[KEY_SIZE + 1];
+    int i = 0;
+    stringCopy(data, index[i]->data.streetName, KEY_SIZE);
+    int maxSum = asciiSum(data);
+    for (i = 1; i < MAX_DATA; i++) {
+        stringCopy(data, index[i]->data.streetName, KEY_SIZE);
+        if (maxSum < asciiSum(data)) {
+            maxSum = asciiSum(data);
+        }
+    }
+    return maxSum;
+}
 void digitalSortByStreetName(list*& S) {
     queue Q[256];
     list* p;

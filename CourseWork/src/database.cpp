@@ -2,15 +2,6 @@
 
 #include "list.h"
 
-int welcome() {
-    printf("Welcome to the database system testBase4.dat;\n");
-    printf(
-        "Before using the services, establish a connection with the database, to establish a connection "
-        "enter 1; \nIf you want to exit the menu, enter 0;\n");
-    int key = -1;
-    scanf("%d", &key);
-    return key;
-}
 FILE* openDB() {
     FILE* fp = fopen("testBase4.dat", "rb");
     return fp;
@@ -20,72 +11,121 @@ void menuShow() {
     printf(
         "Output Database Like Stack: 1\nSort Database by street name: 2\nSort Database by house number: 3\n");
 }
+void showfullMenu(int& key) {
+    printf("if you want to output database enter 1:\n");
+    printf("If you want to take binary search enter: 2\n");
+    printf("If you want to get out of menu enter: 0\n");
+    if (scanf("%d", &key) != 1) {
+        key = -1;
+    }
+    if (key == 0) {
+        printf("\n\t!EXIT!\n");
+    }
+}
 void menu(int& key, FILE*& fp, list*& head) {
-    switch (key) {
-        case 1:
-            fp = openDB();
-            if (!fp) {
-                printf("Error opening file\n");
-                return;
-            }
-
-            menuShow();
-            int count;
-            if ((scanf("%d", &key) == 1) && (key >= 0 && key < 4)) {
-                printf("Enter the number of output items (LIMITED BY 4000): ");
-                if ((scanf("%d", &count) == 1) && readData(fp, head, count)) {
-                    switch (key) {
-                        case 1:
-                            showStackLikeQueue(head);
-                            break;
-                        case 2:
-                            digitalSortByStreetName(head);
-                            showList(head);
-                            break;
-                        case 3:
-                            digitalSortByHouseNumber(head);
-                            showList(head);
-                            break;
-                        // case 4:
-                        //     digitalSortAll(head);
-                        //     showList(head);
-                        case 0:
-                        default:
-                            break;
-                    }
+    int boolean = 0;
+    struct list* pointer[4000];
+    while (key != 0) {
+        switch (key) {
+            case 1:
+                fp = openDB();
+                if (!fp) {
+                    printf("Error opening file\n");
+                    return;
                 }
-            } else {
+                menuShow();
+                if ((scanf("%d", &key) == 1) && (key >= 0 && key < 4)) {
+                    boolean = readData(fp, head);
+                    int count = 0;
+                    int saveKey = key;
+                    while (count != 3980) {
+                        switch (key) {
+                            case 1:
+                                indexArr(head, pointer);
+                                for (int i = MAX_DATA - 1; i > MAX_DATA - count - 20; i--) {
+                                    showRecord(pointer[i]->data);
+                                }
+                                boolean = 0;
+                                break;
+                            case 2:
+                                if (count < 20) {
+                                    digitalSortByStreetName(head);
+                                    indexArr(head, pointer);
+                                }
+                                showIndexArr(pointer, count);
+                                boolean = 1;
+                                break;
+                            case 3:
+                                if (count < 20) {
+                                    digitalSortByHouseNumber(head);
+                                    indexArr(head, pointer);
+                                }
+                                showIndexArr(pointer, count);
+                                break;
+                                boolean = 0;
+                            // case 4:
+                            //     digitalSortAll(head);
+                            //     showList(head);
+                            case 0:
+                                if (saveKey != 2) {
+                                    boolean = 0;
+                                }
+                                printf("\n\t!EXIT MENU!\n");
+                                count = 3980;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (count != 3980 && key) {
+                            count += 20;
+                            printf("To continue enter same number, to exit enter 0: ");
+                            scanf("%d", &key);
+                        }
+                        if (saveKey != key && key != 0) {
+                            printf("\n\t!WRONG\tINPUT!\n");
+                            break;
+                        }
+                    }
+                } else {
+                    printf("\n\t!WRONG\tINPUT!\n");
+                    return;
+                }
+                showfullMenu(key);
+                break;
+            case 2:
+                if (boolean) {
+                    char x[KEY_SIZE + 1];
+                    printf("Enter key: ");
+                    scanf("%s", x);
+                    int index = binSearch(pointer, x);
+                    if (index == -1) {
+                        printf("NOT FOUND");
+                    } else {
+                        queue* Q =  findAllKeys(pointer, 0, x);
+                        showList(Q[asciiSum(x)].head);
+                    }
+                    showfullMenu(key);
+                } else {
+                    printf("\n\t!DB wasn't opened or sorted!\t\n");
+                    showfullMenu(key);
+                }
+                break;
+            case 0:
+                printf("\n\t!EXIT!\n");
+                break;
+            default:
                 printf("\n\t!WRONG\tINPUT!\n");
                 return;
-            }
-            break;
-        case 0:
-            printf("\n\t!EXIT!\n");
-            break;
-        default:
-            printf("\n\t!WRONG\tINPUT!\n");
-            return;
-            break;
+                break;
+        }
     }
 }
 
-int readData(FILE* fp, list*& head, int count) {
-    int boolean = 1;
-    if (count > MAX_DATA) {
-        printf("\n\tERROR:The number of elements cannot exceed%d\n", MAX_DATA);
-        boolean = 0;
+int readData(FILE* fp, list*& head) {
+    Record record;
+    while (fread(&record, sizeof(Record), 1, fp)) {
+        push(head, record);
     }
-    if (count <= 0) {
-        printf("\n\tERROR:The number of elements can't be that number\n");
-        boolean = 0;
-    }
-    if (boolean) {
-        Record record;
-        int i = 0;
-        while (fread(&record, sizeof(Record), 1, fp) && i < count) {
-            push(head, record);
-            i++;
-        }
-    }
+    fclose(fp);
     return 1;
 }

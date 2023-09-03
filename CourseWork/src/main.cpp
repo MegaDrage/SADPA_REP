@@ -10,11 +10,11 @@ int main() {
     setlocale(LC_ALL, ".866");
     SetConsoleCP(866);
     SetConsoleOutputCP(866);
-    int key = welcome();
+    int key;
+    showfullMenu(key);
     FILE* fp;
     list* head = nullptr;
     menu(key, fp, head);
     destroyList(head);
-    fclose(fp);
     return 0;
 }
