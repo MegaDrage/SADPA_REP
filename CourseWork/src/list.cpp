@@ -50,7 +50,7 @@ void indexArr(list* head, list** index) {
 }
 void showIndexArr(list** index, int count) {
     for (int i = 0; i < count + 20; i++) {
-        showRecord(index[i]->data);
+        showRecord(index[i]->data, i);
     }
 }
 

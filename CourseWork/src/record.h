@@ -19,6 +19,7 @@ struct Record {
     short int appNumber;
     char settlementDate[10];
 };
+void showRecord(Record record, int i);
 void showRecord(Record record);
 int stringCompare(const char* str, const char* str1);
 void stringCopy(char* src, char* dest, int count);

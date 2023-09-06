@@ -42,8 +42,8 @@ void menu(int& key, FILE*& fp, list*& head) {
                         switch (key) {
                             case 1:
                                 indexArr(head, pointer);
-                                for (int i = MAX_DATA - 1; i > MAX_DATA - count - 20; i--) {
-                                    showRecord(pointer[i]->data);
+                                for (int i = MAX_DATA - 1; i > 0; i--) {
+                                    showRecord(pointer[i]->data, MAX_DATA - i - 1);
                                 }
                                 boolean = 0;
                                 break;
@@ -101,7 +101,7 @@ void menu(int& key, FILE*& fp, list*& head) {
                     if (index == -1) {
                         printf("NOT FOUND");
                     } else {
-                        queue* Q =  findAllKeys(pointer, 0, x);
+                        queue* Q = findAllKeys(pointer, 0, x);
                         showList(Q[asciiSum(x)].head);
                     }
                     showfullMenu(key);
