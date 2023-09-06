@@ -22,8 +22,10 @@ void pushBack(list*& tail, Record data) {
     tail = p;
 }
 void showList(list* head) {
+    int i = MAX_DATA;
     while (head) {
-        showRecord(head->data);
+        showRecord(head->data, i);
+        i--;
         head = head->next;
     }
 }

@@ -25,26 +25,24 @@ void showfullMenu(int& key) {
 void menu(int& key, FILE*& fp, list*& head) {
     int boolean = 0;
     struct list* pointer[4000];
+    fp = openDB();
+    if (!fp) {
+        printf("Error opening file\n");
+        return;
+    }
+    boolean = readData(fp, head);
     while (key != 0) {
         switch (key) {
             case 1:
-                fp = openDB();
-                if (!fp) {
-                    printf("Error opening file\n");
-                    return;
-                }
                 menuShow();
                 if ((scanf("%d", &key) == 1) && (key >= 0 && key < 4)) {
-                    boolean = readData(fp, head);
                     int count = 0;
                     int saveKey = key;
                     while (count != 3980) {
                         switch (key) {
                             case 1:
                                 indexArr(head, pointer);
-                                for (int i = MAX_DATA - 1; i > 0; i--) {
-                                    showRecord(pointer[i]->data, MAX_DATA - i - 1);
-                                }
+                                showStackLikeQueue(head);
                                 boolean = 0;
                                 break;
                             case 2:
