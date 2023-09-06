@@ -143,7 +143,7 @@ void digitalSortByHouseNumber(list*& S) {
         }
         p = S;
         while (p) {
-            d = (p->data.houseNumber >> (j * 8)) & 0xFF;
+            d = (p->data.houseNumber >> j) & 0xFF;
             Q[d].tail->next = p;
             Q[d].tail = p;
             p = p->next;
@@ -158,7 +158,36 @@ void digitalSortByHouseNumber(list*& S) {
         }
     }
 }
+
+void digitalSortByAppNumber(list*& S) {
+    queue Q[256];
+    list* p;
+    int d;
+    int L = sizeof(short int);
+    for (int j = L; j >= 0; j--) {
+        for (int i = 0; i < 256; i++) {
+            queueInit(Q[i].head, Q[i].tail);
+        }
+        p = S;
+        while (p) {
+            d = (p->data.appNumber >> j) & 0xFF;
+            Q[d].tail->next = p;
+            Q[d].tail = p;
+            p = p->next;
+        }
+        p = (list*)&S;
+        for (int i = 0; i < 256; i++) {
+            if (Q[i].tail != (list*)&Q[i].head) {
+                p->next = Q[i].head;
+                p = Q[i].tail;
+            }
+            p->next = nullptr;
+        }
+    }
+}
+
 void digitalSortAll(list*& S) {
-    digitalSortByStreetName(S);
+    digitalSortByAppNumber(S);
     digitalSortByHouseNumber(S);
+    digitalSortByStreetName(S);
 }

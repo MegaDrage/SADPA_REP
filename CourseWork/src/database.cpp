@@ -11,7 +11,7 @@ void menuShow() {
     printf(
         "Output Database Like Stack: 1\nSort Database by street name: 2\nSort Database by house number: 3\n");
 }
-void showfullMenu(int& key) {
+void showFullMenu(int& key) {
     printf("if you want to output database enter 1:\n");
     printf("If you want to take binary search enter: 2\n");
     printf("If you want to get out of menu enter: 0\n");
@@ -35,7 +35,7 @@ void menu(int& key, FILE*& fp, list*& head) {
         switch (key) {
             case 1:
                 menuShow();
-                if ((scanf("%d", &key) == 1) && (key >= 0 && key < 4)) {
+                if ((scanf("%d", &key) == 1) && (key >= 0 && key <= 4)) {
                     int count = 0;
                     int saveKey = key;
                     while (count != 3980) {
@@ -59,11 +59,12 @@ void menu(int& key, FILE*& fp, list*& head) {
                                     indexArr(head, pointer);
                                 }
                                 showIndexArr(pointer, count);
-                                break;
                                 boolean = 0;
-                            // case 4:
-                            //     digitalSortAll(head);
-                            //     showList(head);
+                                break;
+                            case 4:
+                                digitalSortAll(head);
+                                showStackLikeQueue(head);
+                                break;
                             case 0:
                                 if (saveKey != 2) {
                                     boolean = 0;
@@ -88,7 +89,7 @@ void menu(int& key, FILE*& fp, list*& head) {
                     printf("\n\t!WRONG\tINPUT!\n");
                     return;
                 }
-                showfullMenu(key);
+                showFullMenu(key);
                 break;
             case 2:
                 if (boolean) {
@@ -102,10 +103,10 @@ void menu(int& key, FILE*& fp, list*& head) {
                         queue* Q = findAllKeys(pointer, 0, x);
                         showList(Q[asciiSum(x)].head);
                     }
-                    showfullMenu(key);
+                    showFullMenu(key);
                 } else {
                     printf("\n\t!DB wasn't opened or sorted!\t\n");
-                    showfullMenu(key);
+                    showFullMenu(key);
                 }
                 break;
             case 0:
