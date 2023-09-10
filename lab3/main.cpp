@@ -1,37 +1,34 @@
 #include <stdlib.h>
 #include <time.h>
+
 #include "libs.hpp"
 void printTree(struct tree* root, int level);
 int main() {
     srand(time(NULL));
-    int n = 100;
-    int a[n] = {0};
-    fillInc(a, n);
-    tree* IBT = NULL;
-    IBT = idealBalancedTree(a, 0, n - 1);
     tree* RBT = NULL;
     int exist = 0;
     for (int i = 0; i < 100;) {
-        int randValue = rand() % 300;
+        int randValue = rand() % 20;
         exist = findNode(RBT, randValue);
         if (!exist) {
             insertNodeRec(RBT, randValue);
             i++;
         }
     }
-    printf("|---------|------|----------|--------|------------|\n");
-    printf("| n = 100 | SIZE | CHECKSUM | HEIGHT | AVG-HEIGHT |\n");
-    printf("|---------|------|----------|--------|------------|\n");
-    printf("|   IBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(IBT), checkSumTree(IBT), heightOfTree(IBT), averageHeight(IBT));
-    printf("|---------|------|----------|--------|------------|\n");
-    printf("|   RBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(RBT), checkSumTree(RBT), heightOfTree(RBT), averageHeight(RBT));
-    printf("|---------|------|----------|--------|------------|\n");
-    printf("\n----\t-----RBT-----\t----\n");
+    printf("Before: \n");
+    treeTraversalInOrder(RBT);
+    int i = 0;
+    while (i < 10) {
+        int key = 0;
+        scanf("%d", &key);
+        RBT = deleteNode(RBT, key);
+        printf("After deletion: \n");
+        treeTraversalInOrder(RBT);
+        i++;
+    }
+    //NEXT WORK
     printTree(RBT, 0);
     freeTree(RBT);
-    printf("\n----\t-----IBT-----\t----\n");
-    printTree(IBT, 0);
-    freeTree(IBT);
     return 0;
 }
 

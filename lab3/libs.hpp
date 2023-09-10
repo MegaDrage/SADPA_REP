@@ -1,12 +1,13 @@
 #ifndef LIBS_HPP
 #define LIBS_HPP
-
 #include <stdio.h>
+#include <stdlib.h>
 typedef struct tree {
     int key;
     struct tree* left;
     struct tree* right;
 } tree;
+
 int sizeOfTree(tree* root) {
     if (!root) {
         return 0;
@@ -79,7 +80,7 @@ int isSearchTree(tree* root) {
     return 1;
 }
 tree* createNode(int data) {
-    tree* p = new (tree);
+    tree* p = (tree*)malloc(sizeof(tree));
     p->key = data;
     p->left = NULL;
     p->right = NULL;
@@ -89,7 +90,6 @@ tree* createNode(int data) {
 void insertNodeRec(tree*& root, int data) {
     if (!root) {
         root = createNode(data);
-        return;
     }
     if (root->key > data) {
         insertNodeRec(root->left, data);
@@ -97,23 +97,6 @@ void insertNodeRec(tree*& root, int data) {
         insertNodeRec(root->right, data);
     }
 }
-
-void insertNodePP(tree*& root, int data) {
-    tree** p = &root;
-    while (*p) {
-        if (data < (*p)->key) {
-            p = &((*p)->left);
-        } else if (data > (*p)->key) {
-            p = &((*p)->right);
-        } else {
-            break;
-        }
-    }
-    if (!(*p)) {
-        *p = createNode(data);
-    }
-}
-
 int findNode(tree* root, int x) {
     tree* p = root;
     while (p) {
@@ -130,55 +113,71 @@ int findNode(tree* root, int x) {
     }
     return 0;
 }
-tree* idealBalancedTree(int* arr, int L, int R) {
-    tree* p = new tree;
-    if (L > R) {
-        p = NULL;
-    } else {
-        int mid = (L + R) / 2;
-        p->key = arr[mid];
-        p->left = idealBalancedTree(arr, L, mid - 1);
-        p->right = idealBalancedTree(arr, mid + 1, R);
+
+tree* minNode(tree* root) {
+    tree* p = root;
+    while (p->right) {
+        p = p->right;
     }
     return p;
 }
 
-void fillInc(int* A, int n) {
-    for (int i = 0; i < n; i++) {
-        A[i] = i + 1;
+tree* deleteNode(tree* root, int x) {
+    if (!root) return root;
+    if (root->key > x) {
+        root->left = deleteNode(root->left, x);
+        return root;
+    } else if (root->key < x) {
+        root->right = deleteNode(root->right, x);
+        return root;
     }
-}
-void swapArrElem(int* A, int* B) {
-    int temp = *A;
-    *A = *B;
-    *B = temp;
-}
 
-void QuickSort(int* A, int L, int R) {
-    while (L < R) {
-        int x = A[(L + R) / 2];
-        int i = L;
-        int j = R;
-        while (i <= j) {
-            while (A[i] < x) {
-                i++;
-            }
-            while (A[j] > x) {
-                j--;
-            }
-            if (i <= j) {
-                swapArrElem(&A[i], &A[j]);
-                i++;
-                j--;
-            }
-        }
-        if (j - L > R - i) {
-            QuickSort(A, L, j);
-            L = i;
-        } else {
-            QuickSort(A, i, R);
-            R = j;
-        }
+    if (root->left == NULL) {
+        tree* temp = root->right;
+        free(root);
+        return temp;
+    } else if (root->right == NULL) {
+        tree* temp = root->left;
+        free(root);
+        return temp;
+    } else {
+        tree* temp = minNode(root->left);
+        root->key = temp->key;
+        root->left = deleteNode(root->left, temp->key);
+        return root;
     }
 }
+// tree* deleteNode(tree* root, int x) {
+//     if (root == NULL) return root;
+//     if (root->key < x) {
+//         root->right = deleteNode(root->right, x);
+//         return root;
+//     } else if (root->key > x) {
+//         root->left = deleteNode(root->left, x);
+//         return root;
+//     }
+//     if (root->left == NULL) {
+//         tree* q = root->right;
+//         delete root;
+//         return q;
+//     } else if (root->right == NULL) {
+//         tree* q = root->left;
+//         delete root;
+//         return q;
+//     } else {
+//         tree* s = root;
+//         tree* r = root->right;
+//         while (r->left != NULL) {
+//             s = r;
+//             r = r->left;
+//         }
+//         if (s != root)
+//             s->left = r->right;
+//         else
+//             s->right = r->right;
+//         root->key = r->key;
+//         delete r;
+//         return root;
+//     }
+// }
 #endif
