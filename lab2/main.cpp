@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+
 #include "libs.hpp"
 void printTree(struct tree* root, int level);
 int main() {
@@ -22,9 +23,11 @@ int main() {
     printf("|---------|------|----------|--------|------------|\n");
     printf("| n = 100 | SIZE | CHECKSUM | HEIGHT | AVG-HEIGHT |\n");
     printf("|---------|------|----------|--------|------------|\n");
-    printf("|   IBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(IBT), checkSumTree(IBT), heightOfTree(IBT), averageHeight(IBT));
+    printf("|   IBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(IBT), checkSumTree(IBT),
+           heightOfTree(IBT), averageHeight(IBT));
     printf("|---------|------|----------|--------|------------|\n");
-    printf("|   RBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(RBT), checkSumTree(RBT), heightOfTree(RBT), averageHeight(RBT));
+    printf("|   RBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(RBT), checkSumTree(RBT),
+           heightOfTree(RBT), averageHeight(RBT));
     printf("|---------|------|----------|--------|------------|\n");
     printf("\n----\t-----RBT-----\t----\n");
     printTree(RBT, 0);
