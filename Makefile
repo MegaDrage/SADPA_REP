@@ -6,11 +6,13 @@ SRC0 = lab0/main.cpp lab0/libs.cpp
 SRC1 = lab1/main.cpp lab1/libs.hpp
 SRC2 = lab2/main.cpp lab2/libs.hpp
 SRC3 = lab3/main.cpp lab3/libs.hpp
+SRC4 = lab4/main.cpp lab4/libs.hpp
 OBJS=$(SRC:.c=.o)
 OBJS0=$(SRC0:.c=.o)
 OBJS1=$(SRC1:.c=.o)
 OBJS2=$(SRC2:.c=.o)
 OBJS3=$(SRC3:.c=.o)
+OBJS4=$(SRC4:.c=.o)
 CODIR=CourseWork/build/
 ODIR=build/
 TARGET=$(ODIR)CS_Work.exe
@@ -18,10 +20,11 @@ TARGET0=$(ODIR)lab0.exe
 TARGET1=$(ODIR)lab1.exe
 TARGET2=$(ODIR)lab2.exe
 TARGET3=$(ODIR)lab3.exe
+TARGET4=$(ODIR)lab4.exe
 LIBS=-lm
 
-.PHONY: CS_Work lab0 lab1 lab2 lab3 all clean clean_all
-all: CS_Work lab0 lab1 lab2 lab3 clean
+.PHONY: CS_Work lab0 lab1 lab2 lab3 ;ab4 all clean clean_all
+all: CS_Work lab0 lab1 lab2 lab3 lab4 clean
 CS_Work: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
@@ -37,6 +40,9 @@ $(TARGET2): $(OBJS2)
 lab3: $(TARGET3)
 $(TARGET3): $(OBJS3)
 	$(CC) $(CFLAGS) -o $@ $(OBJS3) $(LIBS)
+lab4: $(TARGET4)
+$(TARGET4): $(OBJS4)
+	$(CC) $(CFLAGS) -o $@ $(OBJS4) $(LIBS)
 clean:
 	find ../ -name "*.o" -type f -delete
 clean_all: clean
