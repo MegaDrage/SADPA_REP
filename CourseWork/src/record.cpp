@@ -1,5 +1,9 @@
 #include "record.h"
 void showRecord(Record record, int i) {
+    if (i % 20 == 0) {
+        printf("\033c");
+        printf("PAGE: %d\n", i / 20);
+    }
     printf("%d. ", i + 1);
     printf("%s\t", record.name);
     printf("%s\t", record.streetName);

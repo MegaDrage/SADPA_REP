@@ -7,10 +7,7 @@ FILE* openDB() {
     return fp;
 }
 
-void menuShow() {
-    printf(
-        "Output Database Like Stack: 1\nSort Database by street name: 2\nSort Database by house number: 3\n");
-}
+void menuShow() { printf("Output Database Like Stack: 1\nSort Database: 2\n"); }
 void showFullMenu(int& key) {
     printf("if you want to output database enter 1:\n");
     printf("If you want to take binary search enter: 2\n");
@@ -30,7 +27,8 @@ void menu(int& key, FILE*& fp, list*& head) {
         printf("Error opening file\n");
         return;
     }
-    boolean = readData(fp, head);
+    readData(fp, head);
+    indexArr(head, pointer);
     while (key != 0) {
         switch (key) {
             case 1:
@@ -41,29 +39,16 @@ void menu(int& key, FILE*& fp, list*& head) {
                     while (count != 3980) {
                         switch (key) {
                             case 1:
-                                indexArr(head, pointer);
-                                showStackLikeQueue(head);
+                                showIndexArr(pointer, 3980);
                                 boolean = 0;
                                 break;
                             case 2:
-                                if (count < 20) {
-                                    digitalSortByStreetName(head);
+                                if (!boolean) {
+                                    digitalSortAll(head);
                                     indexArr(head, pointer);
                                 }
                                 showIndexArr(pointer, count);
                                 boolean = 1;
-                                break;
-                            case 3:
-                                if (count < 20) {
-                                    digitalSortByHouseNumber(head);
-                                    indexArr(head, pointer);
-                                }
-                                showIndexArr(pointer, count);
-                                boolean = 0;
-                                break;
-                            case 4:
-                                digitalSortAll(head);
-                                showStackLikeQueue(head);
                                 break;
                             case 0:
                                 if (saveKey != 2) {
@@ -93,16 +78,7 @@ void menu(int& key, FILE*& fp, list*& head) {
                 break;
             case 2:
                 if (boolean) {
-                    char x[KEY_SIZE + 1];
-                    printf("Enter key: ");
-                    scanf("%s", x);
-                    int index = binSearch(pointer, x);
-                    if (index == -1) {
-                        printf("NOT FOUND");
-                    } else {
-                        queue* Q = findAllKeys(pointer, 0, x);
-                        showList(Q[asciiSum(x)].head);
-                    }
+                    findAllKeys(pointer);
                     showFullMenu(key);
                 } else {
                     printf("\n\t!DB wasn't opened or sorted!\t\n");

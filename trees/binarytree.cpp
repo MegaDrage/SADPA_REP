@@ -5,7 +5,7 @@ void treeTraversal(tree* root);
 int sizeOfTree(tree* root);
 int heightOfTree(tree* root);
 double averageHeight(tree* root);
-int sumOfLenghtPaths(tree* root, int L);
+int sumOfLenPaths(tree* root, int L);
 int checksumTree(tree* root);
 void freeTree(tree*& root);
 int findNode(tree* root, int x);
@@ -60,11 +60,11 @@ int heightOfTree(tree* root) {
     }
 }
 
-int sumOfLenghtPaths(tree* root, int L) {
+int sumOfLenPaths(tree* root, int L) {
     if (!root) {
         return 0;
     } else {
-        return L + sumOfLenghtPaths(root->left, L + 1) + sumOfLenghtPaths(root->right, L + 1);
+        return L + sumOfLenPaths(root->left, L + 1) + sumOfLenPaths(root->right, L + 1);
     }
 }
 
@@ -75,7 +75,7 @@ int checksumTree(tree* root) {
         return root->key + checksumTree(root->left) + checksumTree(root->right);
     }
 }
-double averageHeight(tree* root) { return sumOfLenghtPaths(root, 1) / (double)sizeOfTree(root); }
+double averageHeight(tree* root) { return sumOfLenPaths(root, 1) / (double)sizeOfTree(root); }
 
 tree* createNode(int data) {
     tree* p = new (tree);
@@ -106,12 +106,11 @@ void freeTree(tree*& root) {
 }
 
 int isSearchTree(tree* root) {
-    if ((root && (root->left && ((root->key <= root->left->key) || !isSearchTree(root->left)))) ||
-        (root->left && (root->key >= root->right->key || !isSearchTree(root->right)))) {
+    if (root && ((root->left && (root->key <= root->left->key || !isSearchTree(root->left))) ||
+                 (root->right && (root->key >= root->right->key || !isSearchTree(root->right))))) {
         return 0;
-    } else {
-        return 1;
     }
+    return 1;
 }
 
 int findNode(tree* root, int x) {

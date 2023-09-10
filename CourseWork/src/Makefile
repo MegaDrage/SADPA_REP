@@ -14,4 +14,4 @@ $(TARGET): $(OBJS)
 clean:
 	find ../ -name "*.o" -type f -delete
 clean_all: clean
-	find ../build/ -name "*" -type f -delete
+	find ../build/ -name "*." -type f -delete
