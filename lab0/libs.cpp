@@ -59,8 +59,8 @@ void treeTraversalPreOrder(tree* root) {
 
 void treeTraversalPostOrder(tree* root) {
     if (root) {
-        treeTraversalPostOrder(root->left);
         treeTraversalPostOrder(root->right);
         printf("%d\n", root->key);
+        treeTraversalPostOrder(root->left);
     }
 }

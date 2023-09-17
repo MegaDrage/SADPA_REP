@@ -2,7 +2,7 @@
 
 void printTree(struct tree* root, int level);
 int main() {
-    int n = 100;
+    int n = 12;
     int a[n] = {0};
     fillInc(a, n);
     tree* root = NULL;
