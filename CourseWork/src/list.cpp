@@ -22,10 +22,9 @@ void pushBack(list*& tail, Record data) {
     tail = p;
 }
 void showList(list* head) {
-    int i = MAX_DATA;
+    int i = 0;
     while (head) {
-        showRecord(head->data, i);
-        i--;
+        showRecord(head->data, i++, 0);
         head = head->next;
     }
 }
@@ -52,78 +51,113 @@ void indexArr(list* head, list** index) {
 }
 void showIndexArr(list** index, int count) {
     for (int i = 0; i < count + 20; i++) {
-        showRecord(index[i]->data, i);
+        showRecord(index[i]->data, i, 1);
     }
 }
 
-void findAllKeys(list** indexArr) {
+void showIndexArr(list** index, int start, int end) {
+    for (int i = start; i < end; i++) {
+        showRecord(index[i]->data, i, 0);
+    }
+}
+
+int binarySearch(list** index, const char* x) {
+    if (!x) {
+        return -1;
+    }
+    int left = 0;
+    int right = MAX_DATA - 1;
+    int result = -1;
+    char data[KEY_SIZE + 1];
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        stringCopy(data, index[mid]->data.streetName, KEY_SIZE);
+        if (stringCompare(data, x) == 0) {
+            result = mid;
+            left = mid + 1;
+        } else if (stringCompare(data, x) < 0) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return result;
+}
+
+// int binarySearch(point* pair, const char* x) {
+//     if (!x) {
+//         return -1;
+//     }
+//     int left = 0;
+//     int right = 9;
+//     char data[KEY_SIZE + 1];
+//     while (left < right) {
+//         int mid = (left + right) / 2;
+//         stringCopy(data, pair[mid].key, KEY_SIZE);
+//         if (stringCompare(data, x) < 0) {
+//             left = mid + 1;
+//         } else {
+//             right = mid;
+//         }
+//     }
+//     stringCopy(data, pair[right].key, KEY_SIZE);
+//     if (stringCompare(data, x) == 0) {
+//         return right;
+//     }
+//     else {
+//         return -1;
+//     }
+// }
+
+point* replaceMove(point* src, int count, int start, int end, char* key) {
+    point* newSrc = new point[count + 1];
+    for (int i = 0; i < count; i++) {
+        newSrc[i] = src[i];
+    }
+    delete[] src;
+    newSrc[count - 1].start = (start > 0) ? start + 1 : start;
+    newSrc[count - 1].end = end + 1;
+    stringCopy(newSrc[count - 1].key, key, KEY_SIZE);
+    return newSrc;
+}
+
+int findAllKeys(list** indexArr, point*& index) {
     int i = 0;
     int count = 0;
     char* key = findKey(indexArr, i);
+    index = new point[count + 1];
+    index->start = 0;
+    index->end = 0;
+    stringCopy(index->key, key, KEY_SIZE);
     while (i <= MAX_DATA - 1) {
-        int start = binSearch(indexArr, key);
-        int end = binSearch2(indexArr, key);
-        if (start != -1 && end != -1) {
-            count++;
-        } else {
+        int start = i;
+        int end = binarySearch(indexArr, key);
+        i = end;
+        count++;
+        index = replaceMove(index, count, start, end, key);
+        delete[] key;
+        key = findKey(indexArr, i + 1);
+        if (!key) {
             break;
         }
-        i = end;
-        key = findKey(indexArr, i + 1);
-        printf("%s", key);
     }
-    printf("%d\n", count);
+    // return index;
+    return count;
 }
 
 char* findKey(list** indexArr, int index) {
     char* key = NULL;
-    if (index < 4000) {
+    if (index == -1) {
+        return NULL;
+    }
+    if (index < MAX_DATA) {
         key = new char[MAX_DATA + 1];
-        stringCopy(key, indexArr[index]->data.streetName, MAX_DATA);
+        stringCopy(key, indexArr[index]->data.streetName, KEY_SIZE);
     }
     return key;
 }
 
-int binSearch(list** index, char x[KEY_SIZE + 1]) {
-    int L = 0;
-    int R = MAX_DATA - 1;
-    char data[KEY_SIZE + 1];
-    while (L < R) {
-        int mid = (L + R) / 2;
-        stringCopy(data, index[mid]->data.streetName, KEY_SIZE);
-        if (stringCompare(data, x) < 0) {
-            L = mid + 1;
-        } else {
-            R = mid;
-        }
-    }
-    stringCopy(data, index[R]->data.streetName, KEY_SIZE);
-    if (stringCompare(data, x) == 0) {
-        return R;
-    } else {
-        return -1;
-    }
-}
-int binSearch2(list** index, char x[KEY_SIZE + 1]) {
-    int L = 0;
-    int R = MAX_DATA - 1;
-    char data[KEY_SIZE + 1];
-    while (L < R) {
-        int mid = (L + R) / 2;
-        stringCopy(data, index[mid]->data.streetName, KEY_SIZE);
-        if (stringCompare(data, x) > 0) {
-            L = mid - 1;
-        } else {
-            R = mid;
-        }
-    }
-    stringCopy(data, index[R]->data.streetName, KEY_SIZE);
-    if (stringCompare(data, x) == 0) {
-        return R;
-    } else {
-        return -1;
-    }
-}
 void digitalSortByStreetName(list*& S) {
     queue Q[256];
     list* p;

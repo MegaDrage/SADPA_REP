@@ -3,7 +3,7 @@
 #include "list.h"
 
 FILE* openDB() {
-    FILE* fp = fopen("testBase4.dat", "rb");
+    FILE* fp = fopen("/home/megadrage/programming/SADPA_REP/CourseWork/src/testBase4.dat", "rb");
     return fp;
 }
 
@@ -39,7 +39,7 @@ void menu(int& key, FILE*& fp, list*& head) {
                     while (count != 3980) {
                         switch (key) {
                             case 1:
-                                showIndexArr(pointer, 3980);
+                                showList(head);
                                 boolean = 0;
                                 break;
                             case 2:
@@ -78,7 +78,23 @@ void menu(int& key, FILE*& fp, list*& head) {
                 break;
             case 2:
                 if (boolean) {
-                    findAllKeys(pointer);
+                    point* find;
+                    int count = findAllKeys(pointer, find);
+                    char keyToFind[KEY_SIZE + 1];
+                    for (int i = 0; i < count; i++) {
+                        printf("Key %d: %s\n", i + 1, find[i].key);
+                    }
+                    printf("Enter key to find: ");
+                    scanf("%s", keyToFind);
+                    int i = 0;
+                    for (i = 0; i < count; i++) {
+                        if (stringCompare(find[i].key, keyToFind) == 0) {
+                            showIndexArr(pointer, find[i].start, find[i].end);
+                            break;
+                        }
+                    }
+                    
+                    delete[] find;
                     showFullMenu(key);
                 } else {
                     printf("\n\t!DB wasn't opened or sorted!\t\n");

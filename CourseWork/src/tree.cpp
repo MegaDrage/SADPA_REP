@@ -4,18 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 void AVLtreeTraversal(AVLtree* root);
-int maxNum(int a, int b);
-int sizeOfAVLtree(AVLtree* root);
-int heightOfAVLtree(AVLtree* root);
-int sumOfLenghtPaths(AVLtree* root, int L);
-int checksumAVLtree(AVLtree* root);
-double averageHeight(AVLtree* root);
-int isSearchAVLtree(AVLtree* root);
 void freeAVLtree(AVLtree*& root);
 int findNode(AVLtree* root, int x);
 void insertAVLTree(AVLtree*& root, int data, bool& growth);
 AVLtree* createAVLNode(int data);
-int isHeightbalanced(AVLtree* root, bool& isbalanced);
 void addAVLNode(AVLtree*& root, int data);
 void LLTurn(AVLtree*& root);
 void RRTurn(AVLtree*& root);
@@ -28,32 +20,6 @@ void RR1Turn(AVLtree*& root, bool& decreasing);
 void del(AVLtree*& root, bool& decreasing);
 void DeleteAVLNode(AVLtree*& root, int x, bool& decreasing);
 void deleteNode(AVLtree*& root, int data);
-int main() {
-    AVLtree* basic = NULL;
-    addAVLNode(basic, 10);
-    addAVLNode(basic, 20);
-    addAVLNode(basic, 5);
-    addAVLNode(basic, 6);
-    addAVLNode(basic, 7);
-    addAVLNode(basic, 8);
-    addAVLNode(basic, 9);
-    deleteNode(basic, 6);
-    deleteNode(basic, 7);
-    deleteNode(basic, 8);
-    deleteNode(basic, 9);
-    bool balanced = true;
-    printf("SIZE OF AVLtree: %d\n", sizeOfAVLtree(basic));
-    printf("HEIGHT OF AVLtree: %d\n", heightOfAVLtree(basic));
-    printf("AVERAGE HEIGHT: %lf\n", averageHeight(basic));
-    printf("CHECKSUM: %d\n", checksumAVLtree(basic));
-    printf("SEARCH AVLtree: %d\n", isSearchAVLtree(basic));
-    printf("FOUND: %d\n", findNode(basic, 22));
-    isHeightbalanced(basic, balanced);
-    printf("IS balanced: %d\n", balanced);
-    AVLtreeTraversal(basic);
-    freeAVLtree(basic);
-    return 0;
-}
 AVLtree* createAVLNode(int data) {
     AVLtree* p = new (AVLtree);
     p->key = data;
@@ -275,66 +241,12 @@ void insertAVLTree(AVLtree*& root, int data, bool& growth) {
         }
     }
 }
-int isHeightbalanced(AVLtree* root, bool& isbalanced) {
-    if (root == nullptr || !isbalanced) {
-        return 0;
-    }
-    int left_height = isHeightbalanced(root->left, isbalanced);
-    int right_height = isHeightbalanced(root->right, isbalanced);
-    if (abs(left_height - right_height) > 1) {
-        isbalanced = false;
-    }
-    return maxNum(left_height, right_height) + 1;
-}
 void AVLtreeTraversal(AVLtree* root) {
     if (root) {
         AVLtreeTraversal(root->left);
         printf("%d\n", root->key);
         AVLtreeTraversal(root->right);
     }
-}
-
-int maxNum(int a, int b) { return (a > b) ? a : b; }
-
-int sizeOfAVLtree(AVLtree* root) {
-    if (!root) {
-        return 0;
-    } else {
-        return 1 + sizeOfAVLtree(root->left) + sizeOfAVLtree(root->right);
-    }
-}
-
-int heightOfAVLtree(AVLtree* root) {
-    if (!root) {
-        return 0;
-    } else {
-        return 1 + maxNum(heightOfAVLtree(root->left), heightOfAVLtree(root->right));
-    }
-}
-
-int sumOfLenghtPaths(AVLtree* root, int L) {
-    if (!root) {
-        return 0;
-    } else {
-        return L + sumOfLenghtPaths(root->left, L + 1) + sumOfLenghtPaths(root->right, L + 1);
-    }
-}
-
-int checksumAVLtree(AVLtree* root) {
-    if (!root) {
-        return 0;
-    } else {
-        return root->key + checksumAVLtree(root->left) + checksumAVLtree(root->right);
-    }
-}
-double averageHeight(AVLtree* root) { return sumOfLenghtPaths(root, 1) / (double)sizeOfAVLtree(root); }
-
-int isSearchAVLtree(AVLtree* root) {
-    if (root && ((root->left && (root->key <= root->left->key || !isSearchAVLtree(root->left))) ||
-                 (root->right && (root->key >= root->right->key || !isSearchAVLtree(root->right))))) {
-        return 0;
-    }
-    return 1;
 }
 
 void freeAVLtree(AVLtree*& root) {

@@ -1,6 +1,6 @@
 #include "record.h"
-void showRecord(Record record, int i) {
-    if (i % 20 == 0) {
+void showRecord(Record record, int i, int l) {
+    if (i % 20 == 0 && l != 0) {
         printf("\033c");
         printf("PAGE: %d\n", i / 20);
     }
@@ -27,10 +27,13 @@ int stringCompare(const char* str, const char* str1) {
     return *(const unsigned char*)str - *(const unsigned char*)str1;
 }
 void stringCopy(char* src, char* dest, int count) {
+    if (src == NULL || dest == NULL) {
+        return;
+    }
     for (int i = 0; i < count; i++) {
         src[i] = dest[i];
     }
-    src[KEY_SIZE] = '\0';
+    src[count] = '\0';
 }
 
 int asciiSum(char* src) {
