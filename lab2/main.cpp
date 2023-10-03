@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <time.h>
-
 #include "libs.hpp"
 void printTree(struct tree* root, int level);
 int main() {
@@ -11,12 +10,22 @@ int main() {
     tree* IBT = NULL;
     IBT = idealBalancedTree(a, 0, n - 1);
     tree* RBT = NULL;
-    int exist = 0;
+    bool exist = false;
     for (int i = 0; i < 100;) {
-        int randValue = rand() % 300;
+        int randValue = rand() % 500;
         exist = findNode(RBT, randValue);
         if (!exist) {
-            insertNodeRec(RBT, randValue);
+            insertNodePP(RBT, randValue);
+            i++;
+        }
+    }
+    tree* RBT1 = NULL;
+    exist = false;
+    for (int i = 0; i < 100;) {
+        int randValue = rand() % 500;
+        exist = findNode(RBT1, randValue);
+        if (!exist) {
+            insertNodePP(RBT1, randValue);
             i++;
         }
     }
@@ -29,11 +38,14 @@ int main() {
     printf("|   RBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(RBT), checkSumTree(RBT),
            heightOfTree(RBT), averageHeight(RBT));
     printf("|---------|------|----------|--------|------------|\n");
-    printf("\n----\t-----RBT-----\t----\n");
-    printTree(RBT, 0);
+    printf("|   RBT   | %3d  |  %6d  |   %2d   |  %lf  |\n", sizeOfTree(RBT1), checkSumTree(RBT1),
+           heightOfTree(RBT1), averageHeight(RBT1));
+    printf("|---------|------|----------|--------|------------|\n");
+    // printf("\n----\t-----RBT-----\t----\n");
+    // printTree(RBT, 0);
     freeTree(RBT);
-    printf("\n----\t-----IBT-----\t----\n");
-    printTree(IBT, 0);
+    // printf("\n----\t-----IBT-----\t----\n");
+    // printTree(IBT, 0);
     freeTree(IBT);
     return 0;
 }

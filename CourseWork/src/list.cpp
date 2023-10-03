@@ -85,30 +85,6 @@ int binarySearch(list** index, const char* x) {
     return result;
 }
 
-// int binarySearch(point* pair, const char* x) {
-//     if (!x) {
-//         return -1;
-//     }
-//     int left = 0;
-//     int right = 9;
-//     char data[KEY_SIZE + 1];
-//     while (left < right) {
-//         int mid = (left + right) / 2;
-//         stringCopy(data, pair[mid].key, KEY_SIZE);
-//         if (stringCompare(data, x) < 0) {
-//             left = mid + 1;
-//         } else {
-//             right = mid;
-//         }
-//     }
-//     stringCopy(data, pair[right].key, KEY_SIZE);
-//     if (stringCompare(data, x) == 0) {
-//         return right;
-//     }
-//     else {
-//         return -1;
-//     }
-// }
 
 point* replaceMove(point* src, int count, int start, int end, char* key) {
     point* newSrc = new point[count + 1];

@@ -1,77 +1,150 @@
 #include "treeFuncs.h"
 
+#include "list.h"
+#include "record.h"
+void RRTurn(AVLtree*& root) {
+    AVLtree* q = root->right;
+    root->balance = 0;
+    q->balance = 0;
+    root->right = q->left;
+    q->left = root;
+    root = q;
+}
+void LLTurn(AVLtree*& root) {
+    AVLtree* q = root->left;
+    root->balance = 0;
+    q->balance = 0;
+    root->left = q->right;
+    q->right = root;
+    root = q;
+}
+void RLTurn(AVLtree*& root) {
+    AVLtree* q = root->right;
+    AVLtree* r = q->left;
+    if (r->balance > 0) {
+        root->balance = -1;
+    } else {
+        root->balance = 0;
+    }
+    if (r->balance < 0) {
+        q->balance = 1;
+    } else {
+        q->balance = 0;
+    }
+    r->balance = 0;
+    q->left = r->right;
+    root->right = r->left;
+    r->left = root;
+    r->right = q;
+    root = r;
+}
+
+void LRTurn(AVLtree*& root) {
+    AVLtree* q = root->left;
+    AVLtree* r = q->right;
+    if (r->balance < 0) {
+        root->balance = 1;
+    } else {
+        root->balance = 0;
+    }
+    if (r->balance > 0) {
+        q->balance = -1;
+    } else {
+        q->balance = 0;
+    }
+    r->balance = 0;
+    q->right = r->left;
+    root->left = r->right;
+    r->left = q;
+    r->right = root;
+    root = r;
+}
+
+void addNode(AVLtree*& root, list* data) {
+    bool basic = false;
+    addAVLNode(root, data, basic);
+}
+
+void addAVLNode(AVLtree*& root, list* data, bool& grows) {
+    if (root == nullptr) {
+        root = new AVLtree;
+        root->key.push_back(data);
+        root->left = nullptr;
+        root->right = nullptr;
+        root->balance = 0;
+        grows = true;
+    } else if (root->key.front()->data.appNumber > data->data.appNumber) {
+        addAVLNode(root->left, data, grows);
+        if (grows) {
+            if (root->balance > 0) {
+                root->balance = 0;
+                grows = false;
+            } else if (root->balance == 0) {
+                root->balance = -1;
+                grows = true;
+            } else {
+                if (root->left->balance < 0) {
+                    LLTurn(root);
+                    grows = false;
+                } else {
+                    LRTurn(root);
+                    grows = false;
+                }
+            }
+        }
+    } else if (root->key.front()->data.appNumber < data->data.appNumber) {
+        addAVLNode(root->right, data, grows);
+        if (grows) {
+            if (root->balance < 0) {
+                root->balance = 0;
+                grows = false;
+            } else if (root->balance == 0) {
+                root->balance = 1;
+                grows = true;
+            } else {
+                if (root->right->balance > 0) {
+                    RRTurn(root);
+                    grows = false;
+                } else {
+                    RLTurn(root);
+                    grows = false;
+                }
+            }
+        }
+    } else {
+        root->key.push_back(data);
+    }
+}
+
 void AVLtreeTraversal(AVLtree* root) {
     if (root) {
         AVLtreeTraversal(root->left);
-        printf("%d\n", root->key);
+        showRecord(root->key.front()->data);
         AVLtreeTraversal(root->right);
     }
 }
 
-int maxNum(int a, int b) { return (a > b) ? a : b; }
-
-int sizeOfAVLtree(AVLtree* root) {
-    if (!root) {
-        return 0;
-    } else {
-        return 1 + sizeOfAVLtree(root->left) + sizeOfAVLtree(root->right);
-    }
-}
-
-int heightOfAVLtree(AVLtree* root) {
-    if (!root) {
-        return 0;
-    } else {
-        return 1 + maxNum(heightOfAVLtree(root->left), heightOfAVLtree(root->right));
-    }
-}
-
-int sumOfLenghtPaths(AVLtree* root, int L) {
-    if (!root) {
-        return 0;
-    } else {
-        return L + sumOfLenghtPaths(root->left, L + 1) + sumOfLenghtPaths(root->right, L + 1);
-    }
-}
-
-int checksumAVLtree(AVLtree* root) {
-    if (!root) {
-        return 0;
-    } else {
-        return root->key + checksumAVLtree(root->left) + checksumAVLtree(root->right);
-    }
-}
-double averageHeight(AVLtree* root) { return sumOfLenghtPaths(root, 1) / (double)sizeOfAVLtree(root); }
-
-int isSearchAVLtree(AVLtree* root) {
-    if (root && ((root->left && (root->key <= root->left->key || !isSearchAVLtree(root->left))) ||
-                 (root->right && (root->key >= root->right->key || !isSearchAVLtree(root->right))))) {
-        return 0;
-    }
-    return 1;
-}
-
 void freeAVLtree(AVLtree*& root) {
-    if (root) {
+    if (root != nullptr) {
         freeAVLtree(root->left);
-        delete root;
         freeAVLtree(root->right);
+        delete root;
     }
 }
 
-int findNode(AVLtree* root, int x) {
+std::vector<list*> findNode(AVLtree* root, int x) {
     AVLtree* p = root;
     while (p) {
-        if (p->key < x) {
+        if (p->key.front()->data.appNumber < x) {
             p = p->right;
-        } else if (p->key > x) {
+        } else if (p->key.front()->data.appNumber > x) {
             p = p->left;
-        } else if (p->key == x) {
+        } else if (p->key.front()->data.appNumber == x) {
             break;
         }
     }
     if (p) {
         return p->key;
     }
-    return 0;
+    return std::vector<list*>(0);
 }

@@ -97,8 +97,9 @@ void insertNodeRec(tree*& root, int data) {
         insertNodeRec(root->right, data);
     }
 }
-int findNode(tree* root, int x) {
+bool findNode(tree* root, int x) {
     tree* p = root;
+    bool isFound = false;
     while (p) {
         if (p->key < x) {
             p = p->right;
@@ -109,9 +110,9 @@ int findNode(tree* root, int x) {
         }
     }
     if (p) {
-        return p->key;
+        isFound = true;
     }
-    return 0;
+    return isFound;
 }
 
 tree* minNode(tree* root) {
@@ -147,37 +148,60 @@ tree* deleteNode(tree* root, int x) {
         return root;
     }
 }
-// tree* deleteNode(tree* root, int x) {
-//     if (root == NULL) return root;
-//     if (root->key < x) {
-//         root->right = deleteNode(root->right, x);
-//         return root;
-//     } else if (root->key > x) {
-//         root->left = deleteNode(root->left, x);
-//         return root;
-//     }
-//     if (root->left == NULL) {
-//         tree* q = root->right;
-//         delete root;
-//         return q;
-//     } else if (root->right == NULL) {
-//         tree* q = root->left;
-//         delete root;
-//         return q;
-//     } else {
-//         tree* s = root;
-//         tree* r = root->right;
-//         while (r->left != NULL) {
-//             s = r;
-//             r = r->left;
+
+// void insertNodePP(tree*& root, int data) {
+//     tree** p = &root;
+//     while (*p) {
+//         if (data < (*p)->key) {
+//             p = &((*p)->left);
+//         } else if (data > (*p)->key) {
+//             p = &((*p)->right);
+//         } else {
+//             break;
 //         }
-//         if (s != root)
-//             s->left = r->right;
-//         else
-//             s->right = r->right;
-//         root->key = r->key;
-//         delete r;
-//         return root;
+//     }
+//     if (!(*p)) {
+//         *p = createNode(data);
 //     }
 // }
+
+
+void deleteNodePointer(tree*& root, int x) {
+    tree** p = &root;
+    while (*p) {
+        if (x < (*p)->key) {
+            p = &((*p)->left);
+        } else if (x > (*p)->key) {
+            p = &((*p)->right);
+        } else {
+            break;
+        }
+    }
+    if (*p) {
+        tree* q = *p;
+        if (q->left == NULL) {
+            *p = q->right;
+
+        } else if (q->right == NULL) {
+            *p = q->left;
+        } else {
+            tree* r = q->left;
+            tree* s = q;
+            if (r->right == NULL) {
+                r->right = q->right;
+                *p = r;
+            } else {
+                while (r->right != NULL) {
+                    s = r;
+                    r = r->right;
+                }
+                s->right = r->left;
+                r->left = q->left;
+                r->right = q->right;
+                *p = r;
+            }
+        }
+        free(q);
+    }
+}
 #endif

@@ -26,8 +26,6 @@ void pushBack(list*& tail, Record data);
 void destroyList(list*& head);
 void digitalSortAll(list*& head);
 int binarySearch(list** index, const char* x);
-int binarySearch(point* pair, const char* x);
-// point* findAllKeys(list** indexArr);
 int findAllKeys(list** indexArr, point*& index);
 void indexArr(list* head, list** index);
 char* findKey(list** indexArr, int index);

@@ -6,9 +6,9 @@ void printTree(struct tree* root, int level);
 int main() {
     srand(time(NULL));
     tree* RBT = NULL;
-    int exist = 0;
-    for (int i = 0; i < 100;) {
-        int randValue = rand() % 20;
+    bool exist = false;
+    for (int i = 0; i < 10;) {
+        int randValue = rand() % 300;
         exist = findNode(RBT, randValue);
         if (!exist) {
             insertNodeRec(RBT, randValue);
@@ -21,13 +21,14 @@ int main() {
     while (i < 10) {
         int key = 0;
         scanf("%d", &key);
-        RBT = deleteNode(RBT, key);
+        deleteNodePointer(RBT, key);
         printf("After deletion: \n");
         treeTraversalInOrder(RBT);
         i++;
     }
-    //NEXT WORK
-    printTree(RBT, 0);
+    // NEXT WORK
+    treeTraversalInOrder(RBT);
+    // printTree(RBT, 0);
     freeTree(RBT);
     return 0;
 }

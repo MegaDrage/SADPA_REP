@@ -1,7 +1,5 @@
 #include "database.h"
 
-#include "list.h"
-
 FILE* openDB() {
     FILE* fp = fopen("/home/megadrage/programming/SADPA_REP/CourseWork/src/testBase4.dat", "rb");
     return fp;
@@ -86,18 +84,36 @@ void menu(int& key, FILE*& fp, list*& head) {
                     }
                     printf("Enter key to find: ");
                     scanf("%s", keyToFind);
-                    int i = 0;
-                    for (i = 0; i < count; i++) {
+                    bool check = false;
+                    int index;
+                    for (int i = 0; i < count; i++) {
                         if (stringCompare(find[i].key, keyToFind) == 0) {
                             showIndexArr(pointer, find[i].start, find[i].end);
+                            index = i;
+                            check = true;
                             break;
                         }
                     }
-                    
+                    if (check) {
+                        AVLtree* root = nullptr;
+                        for (int j = find[index].start; j < find[index].end; j++) {
+                            addNode(root, pointer[j]);
+                        }
+                        int findKey;
+                        printf("Enter tree key: ");
+                        scanf("%d", &findKey);
+                        std::vector<list*> found = findNode(root, findKey);
+                        if (!found.empty()) {
+                            for (size_t i = 0; i < found.size(); i++) {
+                                showRecord(found[i]->data);
+                            }
+                        }
+                        freeAVLtree(root);
+                    }
                     delete[] find;
                     showFullMenu(key);
                 } else {
-                    printf("\n\t!DB wasn't opened or sorted!\t\n");
+                    printf("\n\t!DB wasn't sorted!\t\n");
                     showFullMenu(key);
                 }
                 break;

@@ -114,8 +114,9 @@ void insertNodePP(tree*& root, int data) {
     }
 }
 
-int findNode(tree* root, int x) {
+bool findNode(tree* root, int x) {
     tree* p = root;
+    int isFound = false;
     while (p) {
         if (p->key < x) {
             p = p->right;
@@ -126,9 +127,9 @@ int findNode(tree* root, int x) {
         }
     }
     if (p) {
-        return p->key;
+        isFound = true;
     }
-    return 0;
+    return isFound;
 }
 tree* idealBalancedTree(int* arr, int L, int R) {
     tree* p = new tree;

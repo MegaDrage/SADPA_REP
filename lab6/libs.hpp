@@ -1,7 +1,5 @@
-#ifndef LIBS_HPP
-#define LIBS_HPP
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+
 typedef struct AVLtree {
     int key;
     int balance;
@@ -13,24 +11,119 @@ typedef struct AVLtree {
     AVLtree* left;
     AVLtree* right;
 } AVLtree;
-typedef struct tree {
+
+struct B_tree {
     int key;
     int balance;
-    /*
-    if b =-1 -- right - left = -1
-    if b = 0 --  right - left = 0
-    if b = 1 -- right - left = 1
-    */
-    tree* left;
-    tree* right;
-} tree;
+    B_tree* left;
+    B_tree* right;
+};
 void RRTurn(AVLtree*& root);
 void LRTurn(AVLtree*& root);
 void LLTurn(AVLtree*& root);
 void RLTurn(AVLtree*& root);
 int sizeOfAVLtree(AVLtree* root);
-int sizeOfTree(tree* root);
 int maxNum(int a, int b);
+void addNode(B_tree*& root, int data, bool& VR, bool& HR) {
+    if (root == nullptr) {
+        root = new B_tree;
+        root->key = data;
+        root->left = nullptr;
+        root->right = nullptr;
+        root->balance = 0;
+        VR = true;
+    } else {
+        if (root->key > data) {
+            addNode(root->left, data, VR, HR);
+            if (VR) {
+                if (root->balance == 0) {
+                    B_tree* q = root->left;
+                    root->left = q->right;
+                    q->right = root;
+                    root = q;
+                    q->balance = 1;
+                    VR = false;
+                    HR = true;
+                } else {
+                    root->balance = 0;
+                    HR = true;
+                }
+            } else {
+                HR = false;
+            }
+        } else if (root->key < data) {
+            addNode(root->right, data, VR, HR);
+            if (VR) {
+                root->balance = 1;
+                VR = false;
+                HR = true;
+            } else if (HR) {
+                if (root->balance > 0) {
+                    B_tree* q = root->right;
+                    root->right = q->left;
+                    root->balance = 0;
+                    q->balance = 0;
+                    q->left = root;
+                    root = q;
+                    VR = true;
+                    HR = false;
+                } else {
+                    HR = false;
+                }
+            }
+        }
+    }
+}
+
+void traversal(B_tree* root) {
+    if (root) {
+        traversal(root->left);
+        std::cout << root->key << std::endl;
+        traversal(root->right);
+    }
+}
+
+int sizeOfTree(B_tree* root) {
+    if (!root) {
+        return 0;
+    } else {
+        return 1 + sizeOfTree(root->left) + sizeOfTree(root->right);
+    }
+}
+int maxNum(int a, int b) { return (a > b) ? a : b; }
+int heightOfTree(B_tree* root) {
+    if (!root) {
+        return 0;
+    } else {
+        return 1 + maxNum(heightOfTree(root->left), heightOfTree(root->right));
+    }
+}
+
+int checkSumTree(B_tree* root) {
+    if (!root) {
+        return 0;
+    } else {
+        return root->key + checkSumTree(root->left) + checkSumTree(root->right);
+    }
+}
+
+int sumOfLenPaths(B_tree* root, int L) {
+    if (!root) {
+        return 0;
+    } else {
+        return L + sumOfLenPaths(root->left, L + 1) + sumOfLenPaths(root->right, L + 1);
+    }
+}
+double averageHeight(B_tree* root) { return sumOfLenPaths(root, 1) / (double)sizeOfTree(root); }
+
+void freeTree(B_tree*& root) {
+    if (root) {
+        freeTree(root->left);
+        freeTree(root->right);
+        delete root;
+    }
+}
+
 void RRTurn(AVLtree*& root) {
     AVLtree* q = root->right;
     root->balance = 0;
@@ -159,8 +252,6 @@ void AVLtreeTraversal(AVLtree* root) {
     }
 }
 
-int maxNum(int a, int b) { return (a > b) ? a : b; }
-
 int sizeOfAVLtree(AVLtree* root) {
     if (!root) {
         return 0;
@@ -209,118 +300,10 @@ void freeAVLtree(AVLtree*& root) {
         freeAVLtree(root->right);
     }
 }
-/* DELETING TURNS */
-void LL1Turn(AVLtree*& root, bool& decreasing) {
-    AVLtree* q = root->left;
-    if (q->balance == 0) {
-        root->balance = -1;
-        q->balance = 1;
-        decreasing = false;
-    } else {
-        root->balance = 0;
-        q->balance = 0;
-    }
-    root->left = q->right;
-    q->right = root;
-    root = q;
-}
-void BRTurn(AVLtree*& root, bool& decreasing) {
-    if (root->balance == 1) {
-        root->balance = 0;
-    } else if (root->balance == 0) {
-        root->balance = -1;
-        decreasing = false;
-    } else if (root->balance == -1) {
-        if (root->left->balance <= 0) {
-            LL1Turn(root, decreasing);
-        } else {
-            LRTurn(root);
-        }
-    }
-}
-
-void RR1Turn(AVLtree*& root, bool& decreasing) {
-    AVLtree* q = root->right;
-    if (q->balance == 0) {
-        root->balance = 1;
-        q->balance = -1;
-        decreasing = false;
-    } else {
-        root->balance = 0;
-        q->balance = 0;
-    }
-    root->right = q->left;
-    q->left = root;
-    root = q;
-}
-void BLTurn(AVLtree*& root, bool& decreasing) {
-    if (root->balance == -1) {
-        root->balance = 0;
-    } else if (root->balance == 0) {
-        root->balance = 1;
-        decreasing = false;
-    } else if (root->balance == 1) {
-        if (root->left->balance >= 0) {
-            RR1Turn(root, decreasing);
-        } else {
-            RLTurn(root);
-        }
-    }
-}
-void del(AVLtree*& root, bool& decreasing) {
-    if (root->right) {
-        del(root->right, decreasing);
-        if (decreasing) {
-            BRTurn(root, decreasing);
-        }
-    } else {
-        if (root != nullptr) {
-            AVLtree* q = root;
-            q->key = root->key;
-            root = root->left;
-            decreasing = true;
-        }
-    }
-}
-//
-void DeleteAVLNode(AVLtree*& root, int x, bool& decreasing) {
-    if (!root) {
-    } else if (root->key > x) {
-        DeleteAVLNode(root->left, x, decreasing);
-        if (decreasing) {
-            BLTurn(root, decreasing);
-        }
-    } else if (root->key < x) {
-        DeleteAVLNode(root->right, x, decreasing);
-        if (decreasing) {
-            BRTurn(root, decreasing);
-        }
-    } else {
-        AVLtree* q = root;
-        if (!(q->right)) {
-            root = q->left;
-            decreasing = true;
-        } else if (!(q->left)) {
-            root = q->right;
-            decreasing = true;
-        } else {
-            del(root->left, decreasing);
-            if (decreasing) {
-                BLTurn(root, decreasing);
-            }
-        }
-        delete q;
-    }
-}
-
-void deleteNode(AVLtree*& root, int data) {
-    bool decreasing = false;
-    DeleteAVLNode(root, data, decreasing);
-}
 
 bool findNode(AVLtree* root, int x) {
     AVLtree* p = root;
-    bool exists = false;
+    bool isFound = false;
     while (p) {
         if (p->key < x) {
             p = p->right;
@@ -331,8 +314,25 @@ bool findNode(AVLtree* root, int x) {
         }
     }
     if (p) {
-        exists = true;
+        isFound = true;
     }
-    return exists;
+    return isFound;
 }
-#endif
+
+bool findNode(B_tree* root, int x) {
+    B_tree* p = root;
+    bool isFound = false;
+    while (p) {
+        if (p->key < x) {
+            p = p->right;
+        } else if (p->key > x) {
+            p = p->left;
+        } else if (p->key == x) {
+            break;
+        }
+    }
+    if (p) {
+        isFound = true;
+    }
+    return isFound;
+}
