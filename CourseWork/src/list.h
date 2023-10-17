@@ -17,12 +17,11 @@ struct point {
     int end;
     char key[KEY_SIZE + 1];
 };
-list* init(Record data);
-void push(list*& head, Record data);
+list* init(const Record data);
+void push(list*& head, const Record data);
 void queueInit(list*& head, list*& tail);
 void showList(list* head);
 void showStackLikeQueue(list* head);
-void pushBack(list*& tail, Record data);
 void destroyList(list*& head);
 void digitalSortAll(list*& head);
 int binarySearch(list** index, const char* x);

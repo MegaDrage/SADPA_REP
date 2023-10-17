@@ -24,6 +24,7 @@ void LLTurn(AVLtree*& root);
 void RLTurn(AVLtree*& root);
 int sizeOfAVLtree(AVLtree* root);
 int maxNum(int a, int b);
+
 void addNode(B_tree*& root, int data, bool& VR, bool& HR) {
     if (root == nullptr) {
         root = new B_tree;
@@ -73,6 +74,12 @@ void addNode(B_tree*& root, int data, bool& VR, bool& HR) {
             }
         }
     }
+}
+
+void addBTreeNode(B_tree*& root, int data) {
+    bool VR = false;
+    bool HR = false;
+    addNode(root, data, VR, HR);
 }
 
 void traversal(B_tree* root) {
@@ -231,6 +238,11 @@ void addAVLNode(AVLtree*& root, int data, bool& grows) {
     } else {
         // Nothing to do
     }
+}
+
+void addAVL(AVLtree*& root, int data) {
+    bool trc = false;
+    addAVLNode(root, data, trc);
 }
 
 int isHeightBalanced(AVLtree* root, bool& isBalanced) {

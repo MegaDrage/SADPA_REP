@@ -22,6 +22,5 @@ struct Record {
 void showRecord(Record record, int i, int l);
 void showRecord(Record record);
 int stringCompare(const char* str, const char* str1);
-void stringCopy(char* src, char* dest, int count);
-int asciiSum(char* src);
+void stringCopy(char* src, const char* dest, int count);
 #endif

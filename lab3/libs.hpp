@@ -149,23 +149,6 @@ tree* deleteNode(tree* root, int x) {
     }
 }
 
-// void insertNodePP(tree*& root, int data) {
-//     tree** p = &root;
-//     while (*p) {
-//         if (data < (*p)->key) {
-//             p = &((*p)->left);
-//         } else if (data > (*p)->key) {
-//             p = &((*p)->right);
-//         } else {
-//             break;
-//         }
-//     }
-//     if (!(*p)) {
-//         *p = createNode(data);
-//     }
-// }
-
-
 void deleteNodePointer(tree*& root, int x) {
     tree** p = &root;
     while (*p) {

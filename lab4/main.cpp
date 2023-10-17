@@ -79,7 +79,7 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 220, 220, 220, 255);
         SDL_RenderClear(renderer);
         int treeWidth = calculateWidth(AVLTree);
-        drawTree(renderer, AVLTree, SCREEN_WIDTH / 2, NODE_RADIUS + 10, treeWidth * (NODE_RADIUS - 6));
+        drawTree(renderer, AVLTree, SCREEN_WIDTH / 2, NODE_RADIUS + 10, treeWidth * (NODE_RADIUS - 8));
 
         SDL_RenderPresent(renderer);
     }
@@ -163,4 +163,6 @@ void drawTree(SDL_Renderer* renderer, AVLtree* node, int x, int y, int spacing) 
     char keyStr[10];
     snprintf(keyStr, sizeof(keyStr), "%d", node->key);
     stringRGBA(renderer, x - 5, y - 5, keyStr, 0, 0, 0, 255);
+    snprintf(keyStr, sizeof(keyStr), "%d", node->balance);
+    stringRGBA(renderer, x + 10, y - 25, keyStr, 0, 0, 0, 255);
 }

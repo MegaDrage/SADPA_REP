@@ -9,6 +9,7 @@ void menuShow() { printf("Output Database Like Stack: 1\nSort Database: 2\n"); }
 void showFullMenu(int& key) {
     printf("if you want to output database enter 1:\n");
     printf("If you want to take binary search enter: 2\n");
+    printf("To encode database enter: 3\n");
     printf("If you want to get out of menu enter: 0\n");
     if (scanf("%d", &key) != 1) {
         key = -1;
@@ -117,6 +118,8 @@ void menu(int& key, FILE*& fp, list*& head) {
                     showFullMenu(key);
                 }
                 break;
+            case 3:
+                /*Codding*/
             case 0:
                 printf("\n\t!EXIT!\n");
                 break;

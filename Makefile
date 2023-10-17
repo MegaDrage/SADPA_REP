@@ -10,6 +10,7 @@ SRC4 = lab4/main.cpp lab4/libs.hpp
 SRC5 = lab5/main.cpp lab5/libs.hpp
 SRC6 = lab6/main.cpp lab6/libs.hpp
 SRC7 = lab7/main.cpp lab7/libs.hpp
+SRC8 = lab8/main.cpp lab8/libs.hpp
 OBJS=$(SRC:.c=.o)
 OBJS0=$(SRC0:.c=.o)
 OBJS1=$(SRC1:.c=.o)
@@ -19,6 +20,7 @@ OBJS4=$(SRC4:.c=.o)
 OBJS5=$(SRC5:.c=.o)
 OBJS6=$(SRC6:.c=.o)
 OBJS7=$(SRC7:.c=.o)
+OBJS8=$(SRC8:.c=.o)
 CODIR=CourseWork/build/
 ODIR=build/
 TARGET=$(ODIR)CS_Work.exe
@@ -30,10 +32,11 @@ TARGET4=$(ODIR)lab4.exe
 TARGET5=$(ODIR)lab5.exe
 TARGET6=$(ODIR)lab6.exe
 TARGET7=$(ODIR)lab7.exe
+TARGET8=$(ODIR)lab8.exe
 LIBS=-lm `sdl2-config --libs` -lSDL2_gfx
 
-.PHONY: CS_Work lab0 lab1 lab2 lab3 lab4 lab5 lab6 lab7 all clean clean_all
-all: CS_Work lab0 lab1 lab2 lab3 lab4 lab5 lab6 lab7 clean
+.PHONY: CS_Work lab0 lab1 lab2 lab3 lab4 lab5 lab6 lab7 lab8 all clean clean_all
+all: CS_Work lab0 lab1 lab2 lab3 lab4 lab5 lab6 lab7 lab8 clean
 CS_Work: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
@@ -61,6 +64,9 @@ $(TARGET6): $(OBJS6)
 lab7: $(TARGET7)
 $(TARGET7): $(OBJS7)
 	$(CC) $(CFLAGS) -o $@ $(OBJS7) $(LIBS)
+lab8: $(TARGET8)
+$(TARGET8): $(OBJS8)
+	$(CC) $(CFLAGS) -o $@ $(OBJS8) $(LIBS)
 clean:
 	find ../ -name "*.o" -type f -delete
 clean_all: clean

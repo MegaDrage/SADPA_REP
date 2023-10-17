@@ -1,14 +1,12 @@
 #include <iostream>
 
 struct optTree {
-    // bool use = false;
     int w;
     int key;
-    optTree* left;
-    optTree* right;
+    optTree *left = nullptr, *right = nullptr;
 };
 
-void getAW(int** matrix, int n, optTree** V) {
+void getAW(long** matrix, int n, optTree** V) {
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
             matrix[i][j] = matrix[i][j - 1] + V[j - 1]->w;
@@ -16,7 +14,7 @@ void getAW(int** matrix, int n, optTree** V) {
     }
 }
 
-void getAPnAR(int**& AW, int n, int**& AP, int**& AR) {
+void getAPnAR(long**& AW, int n, long**& AP, long**& AR) {
     for (int i = 0; i < n - 1; i++) {
         int j = i + 1;
         AP[i][j] = AW[i][j];
@@ -27,10 +25,11 @@ void getAPnAR(int**& AW, int n, int**& AP, int**& AR) {
             int j = i + h;
             int m = AR[i][j - 1];
             int min = AP[i][m - 1] + AP[m][j];
-            for (int k = m + 1; k < AR[i + 1][j]; k++) {
+            for (int k = m + 1; k <= AR[i + 1][j]; k++) {
                 int x = AP[i][k - 1] + AP[k][j];
                 if (x < min) {
-                    m = k, min = x;
+                    m = k;
+                    min = x;
                 }
             }
             AP[i][j] = min + AW[i][j];
@@ -39,32 +38,53 @@ void getAPnAR(int**& AW, int n, int**& AP, int**& AR) {
     }
 }
 
-void addNode(optTree*& root, optTree**& V, int k) {
-    if (root == nullptr) {
-        root = new optTree;
-        root->key = V[k]->key;
-        root->w = V[k]->w;
-        root->left = nullptr;
-        root->right = nullptr;
-    } else {
-        if (root->key > V[k]->key) {
-            addNode(root->left, V, k);
-        } else if (root->key < V[k]->key) {
-            addNode(root->right, V, k);
-        }
-    }
+// void calculateAwApAR(int n, int**& Aw, int**& Ap, int**& AR, optTree**& weights) {
+//     for (int i = 0; i < n; i++) {
+//         Aw[i][i] = 0;
+//         Ap[i][i] = 0;
+//         AR[i][i] = 0;
+//     }
+//     int minK = 0;
+//     for (int len = 2; len < n; len++) {
+//         for (int i = 0; i < n - len + 1; i++) {
+//             int j = i + len - 1;
+//             Aw[i][j] = Aw[i][j - 1] + weights[j - 1]->w;
+//             Ap[i][j] = Aw[i][j] + Ap[i][i] + Ap[i + 1][j];
+
+//             minK = i;
+//             int minCost = Ap[i][i] + Ap[i + 1][j];
+
+//             for (int k = i + 1; k <= j; k++) {
+//                 int temp = Ap[i][k - 1] + Ap[k][j];
+//                 if (temp < minCost) {
+//                     minCost = temp;
+//                     minK = k;
+//                 }
+//             }
+
+//             AR[i][j] = minK;
+//         }
+//     }
+//     AR[0][n] = minK;
+// }
+
+optTree* addNode(optTree**& V, int k) {
+    optTree* p = new optTree;
+    p->key = V[k]->key;
+    p->w = V[k]->w;
+    return p;
 }
 
-void createTree(optTree*& root, int L, int R, int**& AR, optTree**& V) {
+void createTree(optTree*& root, int L, int R, long**& AR, optTree**& V) {
     if (L < R) {
         int k = AR[L][R];
-        addNode(root, V, k - 1);
-        createTree(root, L, k - 1, AR, V);
-        createTree(root, k, R, AR, V);
+        root = addNode(V, k - 1);
+        createTree(root->left, L, k - 1, AR, V);
+        createTree(root->right, k, R, AR, V);
     }
 }
 
-void printMatrix(int** matrix, int n) {
+void printMatrix(long** matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             std::cout << matrix[i][j];
@@ -95,4 +115,50 @@ void treeRootTraverse(optTree* root) {
         treeTraverse(root->left);
         treeTraverse(root->right);
     }
+}
+
+int maxNum(int a, int b) { return (a > b) ? a : b; }
+
+int sizeOfOptTree(optTree* root) {
+    if (!root) {
+        return 0;
+    } else {
+        return 1 + sizeOfOptTree(root->left) + sizeOfOptTree(root->right);
+    }
+}
+
+int heightOfOptTree(optTree* root) {
+    if (!root) {
+        return 0;
+    } else {
+        return 1 + maxNum(heightOfOptTree(root->left), heightOfOptTree(root->right));
+    }
+}
+
+int sumOfLenPaths(optTree* root, int L) {
+    if (!root) {
+        return 0;
+    } else {
+        return L * root->w + sumOfLenPaths(root->left, L + 1) + sumOfLenPaths(root->right, L + 1);
+    }
+}
+
+int checksumOptTree(optTree* root) {
+    if (!root) {
+        return 0;
+    } else {
+        return root->key + checksumOptTree(root->left) + checksumOptTree(root->right);
+    }
+}
+
+int fullWeight(optTree** V, int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += V[i]->w;
+    }
+    return sum;
+}
+
+double averageHeight(optTree* root, optTree** V, int n) {
+    return sumOfLenPaths(root, 1) / (double)fullWeight(V, n);
 }

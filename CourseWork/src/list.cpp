@@ -1,7 +1,7 @@
 #include "list.h"
 
 #include "record.h"
-list* init(Record data) {
+list* init(const Record data) {
     list* p = new (list);
     p->data = data;
     p->next = nullptr;
@@ -9,18 +9,13 @@ list* init(Record data) {
 }
 
 void queueInit(list*& head, list*& tail) { tail = (list*)&head; }
-void push(list*& head, Record data) {
+void push(list*& head, const Record data) {
     list* p = new (list);
     p->data = data;
     p->next = head;
     head = p;
 }
 
-void pushBack(list*& tail, Record data) {
-    list* p = init(data);
-    tail->next = p;
-    tail = p;
-}
 void showList(list* head) {
     int i = 0;
     while (head) {

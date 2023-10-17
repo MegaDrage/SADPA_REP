@@ -26,7 +26,7 @@ int stringCompare(const char* str, const char* str1) {
     }
     return *(const unsigned char*)str - *(const unsigned char*)str1;
 }
-void stringCopy(char* src, char* dest, int count) {
+void stringCopy(char* src, const char* dest, int count) {
     if (src == NULL || dest == NULL) {
         return;
     }
@@ -34,12 +34,4 @@ void stringCopy(char* src, char* dest, int count) {
         src[i] = dest[i];
     }
     src[count] = '\0';
-}
-
-int asciiSum(char* src) {
-    int sum = 0;
-    while (*src) {
-        sum += *src++ & 0xFF;
-    }
-    return sum;
 }

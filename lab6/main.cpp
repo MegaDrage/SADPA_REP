@@ -19,23 +19,21 @@ int main() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     B_tree* tree = nullptr;
     AVLtree* AVLTree = nullptr;
-    bool VR = false;
-    bool HR = false;
     bool exist = false;
-    bool trc = false;
     for (int i = 0; i < 100;) {
         int randValue = rand() % 200;
         exist = findNode(AVLTree, randValue);
         if (!exist) {
-            addAVLNode(AVLTree, randValue, trc);
+            addAVL(AVLTree, randValue);
             i++;
         }
     }
-    for (int i = 0; i < 100;) {
+
+    for (int i = 0; i < 20;) {
         int randValue = rand() % 200;
         exist = findNode(tree, randValue);
         if (!exist) {
-            addNode(tree, randValue, VR, HR);
+            addBTreeNode(tree, randValue);
             i++;
         }
     }
@@ -82,29 +80,47 @@ int calculateWidth(B_tree* node) {
 
 void drawTree(SDL_Renderer* renderer, B_tree* node, int x, int y, int spacing) {
     if (!node) return;
-
-    // Draw left child
+    int xLeft = x - spacing;
+    int xRight = x + spacing;
+    int yLevel = y;
+    if (node->balance == 0) {
+        yLevel = y + VERTICAL_SPACING;
+    }
     if (node->left) {
-        int xLeft = x - spacing;
-        int yLeft = y + VERTICAL_SPACING;
-        lineRGBA(renderer, x, y, xLeft, yLeft, 0, 0, 0, 255);
-        drawTree(renderer, node->left, xLeft, yLeft, spacing / 2);
+        lineRGBA(renderer, x, y, xLeft, yLevel, 0, 0, 0, 255);
+        drawTree(renderer, node->left, xLeft, yLevel, spacing / 2);
     }
 
-    // Draw right child
     if (node->right) {
-        int xRight = x + spacing;
-        int yRight = y + VERTICAL_SPACING;
-        lineRGBA(renderer, x, y, xRight, yRight, 0, 0, 0, 255);
-        drawTree(renderer, node->right, xRight, yRight, spacing / 2);
+        lineRGBA(renderer, x, y, xRight, yLevel, 0, 0, 0, 255);
+        drawTree(renderer, node->right, xRight, yLevel, spacing / 2);
     }
 
-    // Draw node
     filledCircleRGBA(renderer, x, y, NODE_RADIUS, 255, 255, 255, 255);
     circleRGBA(renderer, x, y, NODE_RADIUS, 0, 0, 0, 255);
 
-    // Draw key
     char keyStr[10];
     snprintf(keyStr, sizeof(keyStr), "%d", node->key);
     stringRGBA(renderer, x - 5, y - 5, keyStr, 0, 0, 0, 255);
+    snprintf(keyStr, sizeof(keyStr), "%d", node->balance);
+    stringRGBA(renderer, x + 15, y - 25, keyStr, 0, 0, 0, 255);
 }
+
+// void drawTree(SDL_Renderer* renderer, B_tree* node, int x, int y, int spacing) {
+//     if (!node) return;
+//     int xLeft = x - spacing;
+//     int xRight = x + spacing;
+//     int yLevel = y;
+//     if (node->balance == 0) {
+//         yLevel = y + VERTICAL_SPACING;
+//     }
+
+//     filledCircleRGBA(renderer, x, y, NODE_RADIUS, 255, 255, 255, 255);
+//     circleRGBA(renderer, x, y, NODE_RADIUS, 0, 0, 0, 255);
+
+//     char keyStr[10];
+//     snprintf(keyStr, sizeof(keyStr), "%d", node->key);
+//     stringRGBA(renderer, x - 5, y - 5, keyStr, 0, 0, 0, 255);
+//     drawTree(renderer, node->right, xRight, yLevel, spacing / 2);
+//     drawTree(renderer, node->left, xLeft, yLevel, spacing / 2);
+// }
