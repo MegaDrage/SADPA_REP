@@ -23,12 +23,14 @@ void showList(list* head) {
         head = head->next;
     }
 }
+
 void showStackLikeQueue(list* head) {
     if (head) {
         showStackLikeQueue(head->next);
         showRecord(head->data);
     }
 }
+
 void destroyList(list*& head) {
     while (head) {
         list* p = head;
@@ -79,7 +81,6 @@ int binarySearch(list** index, const char* x) {
 
     return result;
 }
-
 
 point* replaceMove(point* src, int count, int start, int end, char* key) {
     point* newSrc = new point[count + 1];

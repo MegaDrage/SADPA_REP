@@ -77,8 +77,8 @@ void addNode(B_tree*& root, int data, bool& VR, bool& HR) {
 }
 
 void addBTreeNode(B_tree*& root, int data) {
-    bool VR = false;
-    bool HR = false;
+    bool VR = true;
+    bool HR = true;
     addNode(root, data, VR, HR);
 }
 
@@ -99,7 +99,7 @@ int sizeOfTree(B_tree* root) {
 }
 int maxNum(int a, int b) { return (a > b) ? a : b; }
 int heightOfTree(B_tree* root) {
-    if (!root) {
+    if (!root || root->balance == 1) {
         return 0;
     } else {
         return 1 + maxNum(heightOfTree(root->left), heightOfTree(root->right));
@@ -245,17 +245,6 @@ void addAVL(AVLtree*& root, int data) {
     addAVLNode(root, data, trc);
 }
 
-int isHeightBalanced(AVLtree* root, bool& isBalanced) {
-    if (root == nullptr || !isBalanced) {
-        return 0;
-    }
-    int left_height = isHeightBalanced(root->left, isBalanced);
-    int right_height = isHeightBalanced(root->right, isBalanced);
-    if (abs(left_height - right_height) > 1) {
-        isBalanced = false;
-    }
-    return maxNum(left_height, right_height) + 1;
-}
 void AVLtreeTraversal(AVLtree* root) {
     if (root) {
         AVLtreeTraversal(root->left);

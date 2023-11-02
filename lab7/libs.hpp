@@ -38,36 +38,6 @@ void getAPnAR(long**& AW, int n, long**& AP, long**& AR) {
     }
 }
 
-// void calculateAwApAR(int n, int**& Aw, int**& Ap, int**& AR, optTree**& weights) {
-//     for (int i = 0; i < n; i++) {
-//         Aw[i][i] = 0;
-//         Ap[i][i] = 0;
-//         AR[i][i] = 0;
-//     }
-//     int minK = 0;
-//     for (int len = 2; len < n; len++) {
-//         for (int i = 0; i < n - len + 1; i++) {
-//             int j = i + len - 1;
-//             Aw[i][j] = Aw[i][j - 1] + weights[j - 1]->w;
-//             Ap[i][j] = Aw[i][j] + Ap[i][i] + Ap[i + 1][j];
-
-//             minK = i;
-//             int minCost = Ap[i][i] + Ap[i + 1][j];
-
-//             for (int k = i + 1; k <= j; k++) {
-//                 int temp = Ap[i][k - 1] + Ap[k][j];
-//                 if (temp < minCost) {
-//                     minCost = temp;
-//                     minK = k;
-//                 }
-//             }
-
-//             AR[i][j] = minK;
-//         }
-//     }
-//     AR[0][n] = minK;
-// }
-
 optTree* addNode(optTree**& V, int k) {
     optTree* p = new optTree;
     p->key = V[k]->key;

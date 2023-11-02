@@ -10,14 +10,14 @@ void drawTree(SDL_Renderer* renderer, tree* node, int x, int y, int spacing);
 int calculateWidth(tree* node);
 int main() {
     srand(time(NULL));
-    // SDL_Window* window = nullptr;
-    // SDL_Renderer* renderer = nullptr;
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
 
-    // SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);
 
-    // window = SDL_CreateWindow("SDL Binary Tree", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-    //                           SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    // renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    window = SDL_CreateWindow("SDL Binary Tree", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                              SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     int n = 100;
     tree* OptTree = nullptr;
     tree* root = nullptr;
@@ -41,7 +41,7 @@ int main() {
     for (int i = 0; i < n; i++) {
         V[i] = new tree;
         V[i]->key = i + 1;
-        V[i]->w = i + 1 + rand() % 500;
+        V[i]->w = i + 1 + 10;
     }
     getAW(AW, n, V);
     getAPnAR(AW, n, AP, AR);
@@ -60,26 +60,26 @@ int main() {
     printf("|   Al2   | %3d  |  %6d  |   %3d  |  %.6lf  |\n", sizeOfTree(Alg2), checkSumTree(Alg2),
            heightOfTree(Alg2), averageHeight(Alg2, V, n));
     printf("|---------|------|----------|--------|------------|\n");
-    // bool quit = false;
-    // SDL_Event e;
-    // while (!quit) {
-    //     while (SDL_PollEvent(&e) != 0) {
-    //         if (e.type == SDL_QUIT) {
-    //             quit = true;
-    //         }
-    //     }
+    bool quit = false;
+    SDL_Event e;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
 
-    //     SDL_SetRenderDrawColor(renderer, 220, 220, 220, 255);
-    //     SDL_RenderClear(renderer);
-    //     int treeWidth = calculateWidth(root);
-    //     drawTree(renderer, root, SCREEN_WIDTH / 2, NODE_RADIUS + 10, (treeWidth - 18) * (NODE_RADIUS - 5));
+        SDL_SetRenderDrawColor(renderer, 220, 220, 220, 255);
+        SDL_RenderClear(renderer);
+        int treeWidth = calculateWidth(root);
+        drawTree(renderer, Alg2, SCREEN_WIDTH / 2, NODE_RADIUS + 10, (treeWidth - 18) * (NODE_RADIUS - 5));
 
-    //     SDL_RenderPresent(renderer);
-    // }
+        SDL_RenderPresent(renderer);
+    }
 
-    // SDL_DestroyRenderer(renderer);
-    // SDL_DestroyWindow(window);
-    // SDL_Quit();
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     for (int i = 0; i < n; i++) {
         delete[] V[i];
     }

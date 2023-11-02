@@ -50,21 +50,13 @@ int main() {
     for (int i = 0; i < n - 1; i++) {
         std::cout << "---" << V[i]->w << " ---" << std::endl;
     }
-    // calculateAwApAR(n, AW, AP, AR, V);
     getAW(AW, n, V);
     printMatrix(AW, n);
     getAPnAR(AW, n, AP, AR);
-    // AR[0][1] = 1;
-    // AR[0][2] = 2;
-    // AR[0][3] = 3;
-    // AR[1][2] = 2;
-    // AR[1][3] = 3;
-    // AR[2][3] = 3;
     printMatrix(AP, n);
     printMatrix(AR, n);
     optTree* OptTree = nullptr;
     createTree(OptTree, 0, n - 1, AR, V);
-    // treeRootTraverse(OptTree);
     printf("|---------|------|----------|--------|------------|\n");
     printf("| n = 100 | SIZE | CHECKSUM | HEIGHT | AVG-HEIGHT |\n");
     printf("|---------|------|----------|--------|------------|\n");
@@ -80,13 +72,12 @@ int main() {
             }
         }
 
-    SDL_SetRenderDrawColor(renderer, 220, 220, 220, 255);
-    SDL_RenderClear(renderer);
-    int treeWidth = calculateWidth(OptTree);
-    drawTree(renderer, OptTree, SCREEN_WIDTH / 2, NODE_RADIUS + 10, (treeWidth - 18) * (NODE_RADIUS -
-    5));
+        SDL_SetRenderDrawColor(renderer, 220, 220, 220, 255);
+        SDL_RenderClear(renderer);
+        int treeWidth = calculateWidth(OptTree);
+        drawTree(renderer, OptTree, SCREEN_WIDTH / 2, NODE_RADIUS + 10, (treeWidth - 18) * (NODE_RADIUS - 5));
 
-    SDL_RenderPresent(renderer);
+        SDL_RenderPresent(renderer);
     }
 
     SDL_DestroyRenderer(renderer);

@@ -1,9 +1,10 @@
 #ifndef TREE_H
 #define TREE_H
-#include "list.h"
 #include <vector>
+
+#include "list.h"
 typedef struct AVLtree {
-    std::vector <list*> key;
+    std::vector<list*> key;
     int balance;
     /*
     if b =-1 -- right - left = -1
