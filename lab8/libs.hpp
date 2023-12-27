@@ -75,22 +75,6 @@ void createTree(tree*& root, int L, int R, long**& AR, tree**& V) {
     }
 }
 
-// void A2Alg(tree*& root, int n, tree**& V, int L, int R) {
-//     int weight = 0;
-//     int sum = 0;
-//     if (L <= R) {
-//         for (int i = L; i < R; i++) {
-//             weight += V[i]->w;
-//         }
-//         for (int i = L; i < R; i++) {
-//             if (sum < weight / 2 && sum + V[i]->w >= weight / 2) sum = sum + V[i]->w;
-//             insertNodeRec(root, V[i]);
-//             A2Alg(root, n, V, L, i - 1);
-//             A2Alg(root, n, V, i + 1, R);
-//         }
-//     }
-// }
-
 void A2Alg(tree*& root, int n, tree**& V, int L, int R) {
     if (L <= R) {
         int weight = 0;
@@ -213,6 +197,9 @@ void insertNodeRec(tree*& root, tree* child) {
         insertNodeRec(root->left, child);
     } else if (root->key < child->key) {
         insertNodeRec(root->right, child);
+    }
+    else {
+        
     }
 }
 #endif  // __LIBS_HPP

@@ -116,6 +116,8 @@ void addAVLNode(AVLtree*& root, list* data, bool& grows) {
     }
 }
 
+
+
 void AVLtreeTraversal(AVLtree* root) {
     if (root) {
         AVLtreeTraversal(root->left);
@@ -123,6 +125,7 @@ void AVLtreeTraversal(AVLtree* root) {
         AVLtreeTraversal(root->right);
     }
 }
+
 
 void freeAVLtree(AVLtree*& root) {
     if (root != nullptr) {

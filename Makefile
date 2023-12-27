@@ -1,7 +1,7 @@
 CFLAGS= -Wall -Werror -Wextra -g `sdl2-config --cflags`
 CC=g++
 CSDIR=CourseWork/src/
-SRC=$(CSDIR)main.cpp $(CSDIR)list.cpp $(CSDIR)database.cpp $(CSDIR)record.cpp $(CSDIR)treeFuncs.cpp
+SRC=$(CSDIR)main.cpp $(CSDIR)list.cpp $(CSDIR)database.cpp $(CSDIR)record.cpp $(CSDIR)treeFuncs.cpp $(CSDIR)codding.cpp
 SRC0 = lab0/main.cpp lab0/libs.cpp
 SRC1 = lab1/main.cpp lab1/libs.hpp
 SRC2 = lab2/main.cpp lab2/libs.hpp

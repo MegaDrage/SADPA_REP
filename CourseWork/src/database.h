@@ -6,6 +6,7 @@
 #include "list.h"
 #include "record.h"
 #include "treeFuncs.h"
+#include "codding.h"
 /*ФИО гражданина: текстовое поле 32 символа
                     <Фамилия>_<Имя>_<Отчество>
     Название улицы: текстовое поле 18 символов

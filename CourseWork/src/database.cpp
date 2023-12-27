@@ -118,8 +118,26 @@ void menu(int& key, FILE*& fp, list*& head) {
                     showFullMenu(key);
                 }
                 break;
-            case 3:
-                /*Codding*/
+            case 3: {
+                gbc A[MAX_CHAR_LEN];
+                long double entropy = 0.0;
+                int sym_count = 0;
+                int sum = 0;
+                char** codes = new char*[MAX_CHAR_LEN];
+                for (int i = 0; i < MAX_CHAR_LEN; i++) {
+                    codes[i] = new char[MAX_CHAR_LEN];
+                }
+                BaseCoding(A, &sum, &entropy, &sym_count, codes);
+                CodePrint(A, entropy, codes);
+                codeDB(A, codes);
+                for (int i = 0; i < MAX_CHAR_LEN; i++) {
+                    delete[] codes[i];
+                }
+                delete[] codes;
+                compRatio();
+                showFullMenu(key);
+                break;
+            }
             case 0:
                 printf("\n\t!EXIT!\n");
                 break;
